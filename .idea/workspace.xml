@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="644a6e72-2e80-4efc-b457-efd8cf22629f" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/Public/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/Public/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Core/Exceptions/RecordNotFoundException.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/Exceptions/RecordNotFoundException.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Http/Controllers/CategoryController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Http/Controllers/CategoryController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Http/Validation/FormValidation.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Http/Validation/FormValidation.php" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerSettings">
+    <execution />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="PhpWorkspaceProjectConfiguration" interpreter_name="$PROJECT_DIR$/../../bin/php/php.exe" />
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 3
+}]]></component>
+  <component name="ProjectId" id="32q32uyScuTE5X9wCfsXx1KKJDI" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "PHP Script.CategoryController.php.executor": "Debug",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "Rebasing feature/products__crud",
+    "junie.onboarding.icon.badge.shown": "true",
+    "to.speed.mode.migration.done": "true",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-b598e85cdad2-JavaScript-PS-252.25557.128" />
+        <option value="bundled-php-predefined-a98d8de5180a-ce40d0652d34-com.jetbrains.php.sharedIndexes-PS-252.25557.128" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="644a6e72-2e80-4efc-b457-efd8cf22629f" name="Changes" comment="" />
+      <created>1758134077245</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1758134077245</updated>
+      <workItem from="1758134077246" duration="219000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
