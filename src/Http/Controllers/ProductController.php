@@ -15,9 +15,17 @@ class ProductController extends Controller
 {
     public function index()
     {
-        view("Products/index", [
+        $this->render("Products/index", [
             "products" => $this->getProducts(),
             "categories" => $this->getCategories()
+        ]);
+    }
+
+    public function show(int $id)
+    {
+        $this->render("Products/show", [
+            "categories" => $this->getCategories(),
+            "product" => $this->getProduct($id)
         ]);
     }
 
@@ -28,7 +36,36 @@ class ProductController extends Controller
 
     private function deleteProduct(int $id) {}
 
-    private function getProduct(int $id) {}
+    private function getProduct(int $id): array
+    {
+        $product = db()->fetch("
+    SELECT 
+        p.id, 
+        p.productName, 
+        p.productDescription, 
+        p.productPrice, 
+        p.productImage, 
+        c.categoryName
+    FROM products p
+    JOIN categories c ON p.category_id = c.id
+    WHERE p.id = ?
+", [$id]);
+
+        if ($product === false) {
+            throw new RecordNotFoundException("Category with ID {$id} not found!");
+        }
+        $product = [
+            "product" => $product,
+            "productColor" => $this->getProductColor($product['id'])
+        ];
+
+        return $product;
+    }
+
+    private function getProductColor(int $id): array
+    {
+        return db()->fetchAll("SELECT * FROM product_color where product_id = ?", [$id]);
+    }
 
     private function getProducts(): array
     {

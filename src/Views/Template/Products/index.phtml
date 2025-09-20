@@ -36,9 +36,9 @@ require base_path("Views/Partials/head.phtml");
                                 <td class="px-6 py-4"><?= $product['categoryName'] ?></td>
                                 <td class="px-6 py-4">$<?= $product['productPrice'] ?></td>
                                 <td class="px-6 py-4 space-x-2">
-                                    <button class="px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded-lg shadow hover:bg-indigo-600 transition">View</button>
-                                    <button class="px-4 py-2 text-sm font-medium text-white bg-yellow-500 rounded-lg shadow hover:bg-indigo-600 transition">Edit</button>
-                                    <button class="px-4 py-2 text-sm font-medium text-white bg-red-500 rounded-lg shadow hover:bg-indigo-600 transition">Delete</button>
+                                    <a href="/products/show/<?= $product['id'] ?>" class="px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded-lg cursor-pointer shadow hover:bg-indigo-600 transition">Show</a>
+                                    <a class="px-4 py-2 text-sm font-medium text-white bg-yellow-500 rounded-lg cursor-pointer shadow hover:bg-indigo-600 transition">Edit</a>
+                                    <a class="px-4 py-2 text-sm font-medium text-white bg-red-500 rounded-lg cursor-pointer shadow hover:bg-indigo-600 transition">Delete</a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

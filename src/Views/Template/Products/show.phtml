@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<?php
+require base_path("Views/Partials/head.phtml");
+?>
+
+<body class="bg-gray-50">
+    <?php require base_path("Views/Partials/nav.phtml") ?>
+
+    <div class="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-10 bg-white rounded-lg shadow-lg p-6">
+
+            <!-- Left: Product Image -->
+            <div class="flex justify-center">
+                <img src="<?= $product['product']['productImage'] ?>" alt="Product Image" class="rounded-lg shadow-md">
+            </div>
+
+            <!-- Right: Product Details -->
+            <div class="flex flex-col">
+
+                <!-- Category Name -->
+                <p class="text-sm font-medium text-indigo-600 mb-1">
+                    <?= $product['product']['categoryName'] ?>
+                </p>
+
+                <!-- Product Name + Price -->
+                <div class="flex items-center justify-between mb-3">
+                    <h1 class="text-2xl font-bold text-gray-900">
+                        <?= $product['product']['productName'] ?>
+                    </h1>
+                    <p class="text-xl font-semibold text-gray-800">$<?= $product['product']['productPrice'] ?></p>
+                </div>
+
+                <!-- Rating -->
+                <div class="flex items-center mb-4">
+                    <div class="flex text-yellow-400">
+                        ★★★★☆
+                    </div>
+                    <span class="ml-2 text-gray-600 text-sm">(512 reviews)</span>
+                </div>
+
+                <!-- Colors -->
+                <div class="mb-4">
+                    <p class="font-medium text-gray-700 mb-2">Color</p>
+                    <div class="flex space-x-2">
+                        <?php foreach ($product["productColor"] as $color) : ?>
+                            <?php if (strtolower($color['color']) === "white" || strtolower($color['color']) === "black") : ?>
+                                <?php $bg = $color['color'] ?>
+                            <?php else : ?>
+                                <?php $bg = $color['color'] . "-500" ?>
+                            <?php endif; ?>
+                            <button class="w-8 h-8 rounded-full bg-<?= $bg ?> border-2 border-gray-400"></button>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+                <!-- Sizes -->
+                <div class="mb-6">
+                    <p class="font-medium text-gray-700 mb-2">Size</p>
+                    <div class="flex space-x-2 flex-wrap">
+                        <button class="px-3 py-1 border rounded-md">XXS</button>
+                        <button class="px-3 py-1 border rounded-md">XS</button>
+                        <button class="px-3 py-1 border rounded-md bg-indigo-500 text-white">S</button>
+                        <button class="px-3 py-1 border rounded-md">M</button>
+                        <button class="px-3 py-1 border rounded-md">L</button>
+                        <button class="px-3 py-1 border rounded-md opacity-50 cursor-not-allowed">XL</button>
+                    </div>
+                </div>
+
+                <!-- Add to Cart -->
+                <button class="w-full py-3 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 transition mb-6">
+                    Add to Cart
+                </button>
+
+                <!-- Description -->
+                <div class="mb-6">
+                    <h2 class="text-lg font-semibold text-gray-800 mb-2">Description</h2>
+                    <p class="text-gray-600 text-sm">
+                        The Basic Tee is an honest new take on a classic. The tee uses super soft, pre-shrunk cotton for true comfort and a dependable fit.
+                        They are hand cut and sewn locally, with a special dye technique that gives each tee its own look.
+                    </p>
+                </div>
+                <!-- Fabric & Care -->
+                <div class="mb-6">
+                    <h2 class="text-lg font-semibold text-gray-800 mb-2">Fabric & Care</h2>
+                    <ul class="list-disc pl-5 text-gray-600 text-sm space-y-1">
+                        <li>Only the best materials</li>
+                        <li>Ethically and locally made</li>
+                        <li>Pre-washed and pre-shrunk</li>
+                        <li>Machine wash cold with similar colors</li>
+                    </ul>
+                </div>
+                <!-- Footer Info -->
+                <div class="grid grid-cols-2 gap-4 text-center text-sm text-gray-600">
+                    <div class="p-4 border rounded-md">
+                        <p class="font-medium">International delivery</p>
+                        <p>Get your order in 2 years</p>
+                    </div>
+                    <div class="p-4 border rounded-md">
+                        <p class="font-medium">Loyalty rewards</p>
+                        <p>Don’t look at other tees</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

@@ -13,3 +13,4 @@ $router->delete("/categories/destroy", "CategoryController::destroy");
 
 //Products
 $router->get("/products" , "ProductController::index");
+$router->get("/products/show/{id}" , "ProductController::show");
