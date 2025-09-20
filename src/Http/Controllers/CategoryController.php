@@ -15,10 +15,10 @@ class CategoryController extends Controller
 {
     public function show(int $id)
     {
-            view("showCategory", [
+            view("Category/show", [
                 "products" => $this->getProducts($id),
                 "category" => $this->getCategory($id),
-                "products" => $this->getProducts($id)
+                "categories" => $this->getCategories()
             ]);
             die();
     }

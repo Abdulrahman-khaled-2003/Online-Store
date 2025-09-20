@@ -10,3 +10,6 @@ $router->post("/categories/store", "CategoryController::store");
 $router->get("/categories/edit/{id}", "CategoryController::edit");
 $router->put("/categories/update", "CategoryController::update");
 $router->delete("/categories/destroy", "CategoryController::destroy");
+
+//Products
+$router->get("/products" , "ProductController::index");

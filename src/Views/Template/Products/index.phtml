@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<?php
+require base_path("Views/Partials/head.phtml");
+?>
+
+<body>
+    <?php require base_path("Views/Partials/nav.phtml") ?>
+    <div class="flex justify-center bg-gray-100 py-10">
+        <div class="w-full bg-white shadow-lg rounded-lg p-6">
+            <div class="flex justify-center mb-4">
+                <button class="px-5 py-2 bg-indigo-500 text-white font-medium rounded-lg shadow hover:bg-indigo-600 transition">
+                    + Add Product
+                </button>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm text-gray-700">
+                    <thead class="bg-gray-200 text-gray-600 uppercase text-xs font-semibold">
+                        <tr>
+                            <th class="px-6 py-3">Image</th>
+                            <th class="px-6 py-3">Product Name</th>
+                            <th class="px-6 py-3">Description</th>
+                            <th class="px-6 py-3">Category</th>
+                            <th class="px-6 py-3">Price</th>
+                            <th class="px-6 py-3">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($products as $product) : ?>
+                            <tr class="border-b hover:bg-gray-50 transition">
+                                <td class="px-6 py-4">
+                                    <img src="<?= $product['productImage'] ?>" alt="iPhone" class="w-24 h-24 rounded">
+                                </td>
+                                <td class="px-6 py-4"><?= $product['productName']  ?></td>
+                                <td class="px-6 py-4 max-w-xs truncate"> Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat magni harum ullam! Soluta, earum illum?</td>
+                                <td class="px-6 py-4"><?= $product['categoryName'] ?></td>
+                                <td class="px-6 py-4">$<?= $product['productPrice'] ?></td>
+                                <td class="px-6 py-4 space-x-2">
+                                    <button class="px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded-lg shadow hover:bg-indigo-600 transition">View</button>
+                                    <button class="px-4 py-2 text-sm font-medium text-white bg-yellow-500 rounded-lg shadow hover:bg-indigo-600 transition">Edit</button>
+                                    <button class="px-4 py-2 text-sm font-medium text-white bg-red-500 rounded-lg shadow hover:bg-indigo-600 transition">Delete</button>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
