@@ -75,29 +75,28 @@ require base_path("Views/Partials/head.phtml");
                 <div class="mb-6">
                     <h2 class="text-lg font-semibold text-gray-800 mb-2">Description</h2>
                     <p class="text-gray-600 text-sm">
-                        The Basic Tee is an honest new take on a classic. The tee uses super soft, pre-shrunk cotton for true comfort and a dependable fit.
-                        They are hand cut and sewn locally, with a special dye technique that gives each tee its own look.
+                        <?= $product['product']["productDescription"] ?>
                     </p>
                 </div>
                 <!-- Fabric & Care -->
                 <div class="mb-6">
                     <h2 class="text-lg font-semibold text-gray-800 mb-2">Fabric & Care</h2>
                     <ul class="list-disc pl-5 text-gray-600 text-sm space-y-1">
-                        <li>Only the best materials</li>
-                        <li>Ethically and locally made</li>
-                        <li>Pre-washed and pre-shrunk</li>
-                        <li>Machine wash cold with similar colors</li>
+                        <li>Designed for long-lasting performance</li>
+                        <li>Safe and easy to use or consume</li>
+                        <li>Store or handle properly for best results</li>
+                        <li>Suitable for daily use</li>
                     </ul>
                 </div>
                 <!-- Footer Info -->
                 <div class="grid grid-cols-2 gap-4 text-center text-sm text-gray-600">
                     <div class="p-4 border rounded-md">
                         <p class="font-medium">International delivery</p>
-                        <p>Get your order in 2 years</p>
+                        <p>Fast worldwide shipping, secure packaging, and reliable service.</p>
                     </div>
                     <div class="p-4 border rounded-md">
                         <p class="font-medium">Loyalty rewards</p>
-                        <p>Don’t look at other tees</p>
+                        <p>Earn points on every order and unlock exclusive discounts.</p>
                     </div>
                 </div>
             </div>

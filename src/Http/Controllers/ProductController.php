@@ -29,8 +29,15 @@ class ProductController extends Controller
         ]);
     }
 
+    public function indexCards(){
+        $this->render("Products/indexCards" , [
+            "categories" => $this->getCategories(),
+        ]);
+    }
 
-    private function createProduct() {}
+    private function createProduct() {
+//
+    }
 
     private function editProduct(int $id) {}
 
