@@ -29,14 +29,29 @@ class ProductController extends Controller
         ]);
     }
 
-    public function indexCards(){
-        $this->render("Products/indexCards" , [
+    public function create()
+    {
+        $arr = explode("/", $_SERVER['REQUEST_URI']);
+        $uri = end($arr);
+
+        $this->render("Products/create", [
             "categories" => $this->getCategories(),
+            "uri" => $uri,
+            "colors" => $this->getColors(),
+            "sizes" => $this->getSizes()
         ]);
     }
 
-    private function createProduct() {
-//
+    public function indexCards()
+    {
+        $this->render("Products/indexCards", [
+            "categories" => $this->getCategories()
+        ]);
+    }
+
+    private function createProduct()
+    {
+        //
     }
 
     private function editProduct(int $id) {}
@@ -85,5 +100,15 @@ class ProductController extends Controller
     private function getCategories(): array
     {
         return db()->fetchAll("SELECT * FROM categories");
+    }
+
+    private function getColors(): array
+    {
+        return db()->fetchAll("SELECT * FROM colors");
+    }
+
+    private function getSizes(): array
+    {
+        return db()->fetchAll("SELECT * FROM sizes");
     }
 }
