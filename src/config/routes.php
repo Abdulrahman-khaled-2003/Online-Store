@@ -14,5 +14,6 @@ $router->delete("/categories/destroy", "CategoryController::destroy");
 //Products
 $router->get("/products", "ProductController::index");
 $router->get("/products/show/{id}", "ProductController::show");
-$router->get("/products/create/{name}", "ProductController::create");
 $router->get("/products/cards", "ProductController::indexCards");
+$router->get("/products/create/{id}", "ProductController::create");
+$router->post("/products/store" , "ProductController::store");

@@ -4,11 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Core\Exception\RecordNotFoundException;
 use App\Core\Session;
-use App\Http\Validation\FormValidation;
+use App\Http\Validation\CategoryValidation;
 
 require base_path("./Core/Exceptions/RecordNotFoundException.php");
 require base_path("./Core/Session.php");
-require base_path("Http/Validation/FormValidation.php");
+require base_path("Http/Validation/CategoryValidation.php");
 require "Controller.php";
 
 class CategoryController extends Controller
@@ -39,7 +39,7 @@ class CategoryController extends Controller
 
     public function store(array $attributes)
     {
-        $validated = new FormValidation($attributes);
+        $validated = new CategoryValidation($attributes);
 
         if (!empty($validated->errors)) {
             $this->render("Categories/create", [
@@ -68,7 +68,7 @@ class CategoryController extends Controller
 
     public function update(array $attributes)
     {
-        $validated = new FormValidation($attributes);
+        $validated = new CategoryValidation($attributes);
 
         if (! empty($validated->errors)) {
             $this->render("Categories/edit", [

@@ -6,7 +6,7 @@ use App\Core\Validation;
 
 require base_path("Core/Validation.php");
 
-class FormValidation
+class CategoryValidation
 {
     public $errors = [];
 

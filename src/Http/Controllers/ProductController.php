@@ -4,15 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Core\Exception\RecordNotFoundException;
 use App\Core\Session;
+use App\Core\Validation;
 use App\Http\Validation\FormValidation;
+use App\Http\Validation\ProductValidation;
+use Exception;
 
 require base_path("./Core/Exceptions/RecordNotFoundException.php");
 require base_path("./Core/Session.php");
-require base_path("Http/Validation/FormValidation.php");
+require base_path("Http/Validation/ProductValidation.php");
 require "Controller.php";
 
 class ProductController extends Controller
 {
+    protected $uri;
+    protected $validated;
     public function index()
     {
         $this->render("Products/index", [
@@ -29,17 +34,30 @@ class ProductController extends Controller
         ]);
     }
 
-    public function create()
+    public function create(int $id)
     {
-        $arr = explode("/", $_SERVER['REQUEST_URI']);
-        $uri = end($arr);
+        $categoryName = db()->fetch("SELECT categoryName , id FROM categories where id = ? LIMIT 1", [$id]);
+        if ($categoryName === false) {
+            throw new RecordNotFoundException("Category with ID {$id} not found!");
+        }
 
         $this->render("Products/create", [
+            "errors" => $this->validated->errors ?? null,
+            "category" => $categoryName,
             "categories" => $this->getCategories(),
-            "uri" => $uri,
             "colors" => $this->getColors(),
             "sizes" => $this->getSizes()
         ]);
+        exit();
+    }
+
+    public function store(array $attributes)
+    {
+        $this->validated = new ProductValidation($attributes);
+        if (! empty($this->validated->errors)) {
+            $this->create($attributes['id']);
+        }
+        redirect("/products");
     }
 
     public function indexCards()
@@ -51,7 +69,8 @@ class ProductController extends Controller
 
     private function createProduct()
     {
-        //
+        db()->execute("INSERT INTO products (`productName` , `productImage` , `productPrice` , `productDescription` , `cateogry_id`) 
+            VALUES (? , ? , ? , ? , ?",);
     }
 
     private function editProduct(int $id) {}
@@ -60,18 +79,8 @@ class ProductController extends Controller
 
     private function getProduct(int $id): array
     {
-        $product = db()->fetch("
-    SELECT 
-        p.id, 
-        p.productName, 
-        p.productDescription, 
-        p.productPrice, 
-        p.productImage, 
-        c.categoryName
-    FROM products p
-    JOIN categories c ON p.category_id = c.id
-    WHERE p.id = ?
-", [$id]);
+        $product = db()->fetch("SELECT p.id, p.productName, p.productDescription, p.productPrice, p.productImage, c.categoryName FROM products p
+    JOIN categories c ON p.category_id = c.id  WHERE p.id = ?", [$id]);
 
         if ($product === false) {
             throw new RecordNotFoundException("Category with ID {$id} not found!");
