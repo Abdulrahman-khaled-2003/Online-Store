@@ -32,7 +32,7 @@ require base_path("Views/Partials/head.phtml"); ?>
                 class=" cursor-not-allowed mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 p-3 text-gray-800" />
             <p class="text-red-500 text-md"> <?= $errors['categoryName'] ?? "" ?></p>
         </div>
-
+        <!-- Category Color -->
         </div>
         <?php if ($category['categoryName'] === "Clothies-Category" || $category['categoryName'] === "Technology-Category") :  ?>
             <div>
@@ -44,17 +44,20 @@ require base_path("Views/Partials/head.phtml"); ?>
                             $bgNum = $bg; ?>
                         <?php else: ?>
                             <?php $bgNum = strtolower($color['colorName']) . "-500";
-                            $bg = strtolower($color['colorName'])
-                            ?>
+                            $bg = strtolower($color['colorName']); ?>
                         <?php endif; ?>
                         <input type="checkbox" name="color[]" value="<?= $bg ?>" id="color-<?= $bg ?>" class="hidden peer/<?= $bg ?>">
                         <label for="color-<?= $bg ?>"
-                            class="w-8 h-8 rounded-full bg-<?= $bgNum  ?> border-2 border-gray-300 cursor-pointer peer-checked/<?= $bg ?>:ring-2 peer-checked/<?= $bg ?>:ring-indigo-500"></label>
-                            <?php endforeach; ?>
-                            <p class="text-red-500 text-md"> <?= $errors['productColor'] ?? "" ?></p>
+                            title="<?= ucfirst($color['colorName']) ?>"
+                            class="w-8 h-8 rounded-full bg-<?= $bgNum ?> border-2 border-gray-300 cursor-pointer 
+                           peer-checked/<?= $bg ?>:ring-2 peer-checked/<?= $bg ?>:ring-indigo-500">
+                        </label>
+                    <?php endforeach; ?>
+                    <p class="text-red-500 text-md"> <?= $errors['productColor'] ?? "" ?></p>
                 </div>
             </div>
         <?php endif; ?>
+        <!-- Category Size -->
         <?php if ($category['categoryName'] === "Clothies-Category") : ?>
             <div>
                 <label class="block text-sm font-medium text-indigo-600">Sizes</label>
@@ -65,9 +68,9 @@ require base_path("Views/Partials/head.phtml"); ?>
                             class="px-3 py-1 rounded-lg border border-gray-300 text-indigo-700 cursor-pointer peer-checked/<?= $size['sizeName'] ?>:bg-indigo-600 peer-checked/<?= $size['sizeName'] ?>:text-white">
                             <?= $size['sizeName'] ?>
                         </label>
-                        <?php endforeach; ?>
-                    </div>
-                    <p class="text-red-500 text-md"><?= $errors['productSize'] ?? "" ?></p>
+                    <?php endforeach; ?>
+                </div>
+                <p class="text-red-500 text-md"><?= $errors['productSize'] ?? "" ?></p>
             </div>
         <?php endif; ?>
         <!-- Image Upload -->
@@ -75,6 +78,7 @@ require base_path("Views/Partials/head.phtml"); ?>
             <label class="block text-sm font-medium text-indigo-600">Product Image</label>
             <input type="file" name="image"
                 class="mt-2 w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer" />
+            <p class="text-red-500 text-md"><?= $errors['productImage'] ?? "" ?></p>
         </div>
 
         <!-- Description -->

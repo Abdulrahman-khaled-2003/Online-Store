@@ -9,7 +9,7 @@ require base_path("Core/Validation.php");
 class ProductValidation
 {
     public $errors = [];
-    public function __construct(array $attributes)
+    public function __construct(array $attributes, array $image)
     {
         if (! Validation::textValidate($attributes['product_name'])) {
             $this->errors['productName'] = "Invalid Product Name!";
@@ -33,6 +33,10 @@ class ProductValidation
 
         if (! Validation::arrayValidate($attributes['color'] ?? null)) {
             $this->errors['productColor'] = "Invalid Color Please Choose the Correct Color for Clothies!";
+        }
+
+        if (! Validation::imageHandle($image, $attributes['product_name'])) {
+            $this->errors['productImage'] = "Invalid Extenstion of Image Please Enter Correct Ext!";
         }
     }
 }

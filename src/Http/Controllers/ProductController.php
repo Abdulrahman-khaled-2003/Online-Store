@@ -18,7 +18,8 @@ class ProductController extends Controller
 {
     protected $uri;
     protected $validated;
-    public function index()
+
+    public function index(): void
     {
         $this->render("Products/index", [
             "products" => $this->getProducts(),
@@ -26,7 +27,7 @@ class ProductController extends Controller
         ]);
     }
 
-    public function show(int $id)
+    public function show(int $id): void
     {
         $this->render("Products/show", [
             "categories" => $this->getCategories(),
@@ -34,7 +35,7 @@ class ProductController extends Controller
         ]);
     }
 
-    public function create(int $id)
+    public function create(int $id): void
     {
         $categoryName = db()->fetch("SELECT categoryName , id FROM categories where id = ? LIMIT 1", [$id]);
         if ($categoryName === false) {
@@ -51,27 +52,23 @@ class ProductController extends Controller
         exit();
     }
 
-    public function store(array $attributes)
+    public function store(array $attributes): void
     {
-        $this->validated = new ProductValidation($attributes);
+        $this->validated = new ProductValidation($attributes, $_FILES);
         if (! empty($this->validated->errors)) {
             $this->create($attributes['id']);
         }
         redirect("/products");
     }
 
-    public function indexCards()
+    public function indexCards(): void
     {
         $this->render("Products/indexCards", [
             "categories" => $this->getCategories()
         ]);
     }
 
-    private function createProduct()
-    {
-        db()->execute("INSERT INTO products (`productName` , `productImage` , `productPrice` , `productDescription` , `cateogry_id`) 
-            VALUES (? , ? , ? , ? , ?",);
-    }
+    private function createProduct(array $attributes) {}
 
     private function editProduct(int $id) {}
 
