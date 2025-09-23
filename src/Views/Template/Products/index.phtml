@@ -1,11 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <?php
+
+use App\Core\Session;
+
 require base_path("Views/Partials/head.phtml");
 ?>
 
 <body>
     <?php require base_path("Views/Partials/nav.phtml") ?>
+            <?php if (Session::get("Success-Message")): ?>
+            <div class="mt-16">
+                <h2 class="text-green-500 text-5xl font-bold text-center">
+                    <?= Session::get("Success-Message") ?>
+                </h2>
+            </div>
+        <?php endif; ?>
     <div class="flex justify-center bg-gray-100 py-10">
         <div class="w-full bg-white shadow-lg rounded-lg p-6">
             <div class="flex justify-center mb-4">

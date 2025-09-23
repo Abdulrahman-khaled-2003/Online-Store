@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Core\Exception\RecordNotFoundException;
+use App\Core\Session;
 use App\Http\Validation\ProductValidation;
 
 require base_path("./Core/Exceptions/RecordNotFoundException.php");
@@ -51,6 +52,7 @@ class ProductController extends Controller
         }
         $extenstion = pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION);
         $this->createProduct($attributes, $extenstion);
+        Session::flash("Success-Message", $attributes['product_name'] . " Added Successfuly!");
         redirect("/products");
     }
 
