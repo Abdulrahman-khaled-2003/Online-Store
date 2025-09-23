@@ -12,7 +12,7 @@ require base_path("Views/Partials/head.phtml");
 
             <!-- Left: Product Image -->
             <div class="flex justify-center">
-                <img src="/assets/images/<?= $product['productImage'] ?>" alt="Product Image" class="rounded-lg shadow-md">
+                <img src="/assets/images/<?= htmlspecialchars($product['productImage']) ?>" alt="Product Image" class="rounded-lg shadow-md">
             </div>
 
             <!-- Right: Product Details -->
@@ -20,13 +20,13 @@ require base_path("Views/Partials/head.phtml");
 
                 <!-- Category Name -->
                 <p class="text-sm font-medium text-indigo-600 mb-1">
-                    <?= $product['categoryName'] ?>
+                    <?= htmlspecialchars($product['categoryName']) ?>
                 </p>
 
                 <!-- Product Name + Price -->
                 <div class="flex items-center justify-between mb-3">
                     <h1 class="text-2xl font-bold text-gray-900">
-                        <?= $product['productName'] ?>
+                        <?= htmlspecialchars($product['productName']) ?>
                     </h1>
                     <p class="text-xl font-semibold text-gray-800">$<?= $product['productPrice'] ?></p>
                 </div>
@@ -55,7 +55,7 @@ require base_path("Views/Partials/head.phtml");
                                 <input type="radio" name="color" value="<?= $bg ?>" id="color-<?= $bg ?>" class="hidden peer/<?= $bg ?>">
                                 <label for="color-<?= $bg ?>"
                                     title="<?= ucfirst($color['colorName']) ?>"
-                                    class="w-8 h-8 rounded-full bg-<?= $bgNum ?> border-2 border-gray-300 cursor-pointer 
+                                    class="w-8 h-8 rounded-full bg-<?= htmlspecialchars($bgNum) ?> border-2 border-gray-300 cursor-pointer 
                        peer-checked/<?= $bg ?>:ring-2 peer-checked/<?= $bg ?>:ring-indigo-500">
                                 </label>
                             <?php endforeach; ?>
@@ -74,7 +74,7 @@ require base_path("Views/Partials/head.phtml");
                                 <label for="size-<?= $sizeValue ?>"
                                     class="px-3 py-1 border rounded-md cursor-pointer 
                        peer-checked/<?= $sizeValue ?>:bg-indigo-500 peer-checked/<?= $sizeValue ?>:text-white peer-checked/<?= $sizeValue ?>:border-indigo-500">
-                                    <?= $size['sizeName'] ?>
+                                    <?= htmlspecialchars($size['sizeName']) ?>
                                 </label>
                             <?php endforeach; ?>
                         </div>
@@ -89,7 +89,7 @@ require base_path("Views/Partials/head.phtml");
                 <div class="mb-6">
                     <h2 class="text-lg font-semibold text-gray-800 mb-2">Description</h2>
                     <p class="text-gray-600 text-sm">
-                        <?= $product["productDescription"] ?>
+                        <?= htmlspecialchars($product["productDescription"]) ?>
                     </p>
                 </div>
                 <!-- Fabric & Care -->
