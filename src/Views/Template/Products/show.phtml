@@ -12,7 +12,7 @@ require base_path("Views/Partials/head.phtml");
 
             <!-- Left: Product Image -->
             <div class="flex justify-center">
-                <img src="<?= $product['product']['productImage'] ?>" alt="Product Image" class="rounded-lg shadow-md">
+                <img src="/assets/images/<?= $product['productImage'] ?>" alt="Product Image" class="rounded-lg shadow-md">
             </div>
 
             <!-- Right: Product Details -->
@@ -20,15 +20,15 @@ require base_path("Views/Partials/head.phtml");
 
                 <!-- Category Name -->
                 <p class="text-sm font-medium text-indigo-600 mb-1">
-                    <?= $product['product']['categoryName'] ?>
+                    <?= $product['categoryName'] ?>
                 </p>
 
                 <!-- Product Name + Price -->
                 <div class="flex items-center justify-between mb-3">
                     <h1 class="text-2xl font-bold text-gray-900">
-                        <?= $product['product']['productName'] ?>
+                        <?= $product['productName'] ?>
                     </h1>
-                    <p class="text-xl font-semibold text-gray-800">$<?= $product['product']['productPrice'] ?></p>
+                    <p class="text-xl font-semibold text-gray-800">$<?= $product['productPrice'] ?></p>
                 </div>
 
                 <!-- Rating -->
@@ -40,42 +40,56 @@ require base_path("Views/Partials/head.phtml");
                 </div>
 
                 <!-- Colors -->
-                <div class="mb-4">
+                 <?php if($product['categoryName'] === "Clothies-Category" || $product['categoryName'] === "Technology-Category") : ?>
+                <div class="mb-8">
                     <p class="font-medium text-gray-700 mb-2">Color</p>
-                    <div class="flex space-x-2">
-                        <?php foreach ($product["productColor"] as $color) : ?>
-                            <?php if (strtolower($color['color']) === "white" || strtolower($color['color']) === "black") : ?>
-                                <?php $bg = $color['color'] ?>
-                            <?php else : ?>
-                                <?php $bg = $color['color'] . "-500" ?>
+                    <div class="flex gap-2 mt-2 flex-wrap">
+                        <?php foreach ($productColor as $color) : ?>
+                            <?php if (strtolower($color['colorName']) === "black" || strtolower($color['colorName']) === "white") : ?>
+                                <?php $bg = strtolower($color['colorName']);
+                                $bgNum = $bg; ?>
+                            <?php else: ?>
+                                <?php $bgNum = strtolower($color['colorName']) . "-500";
+                                $bg = strtolower($color['colorName']); ?>
                             <?php endif; ?>
-                            <button class="w-8 h-8 rounded-full bg-<?= $bg ?> border-2 border-gray-400"></button>
+                            <input type="radio" name="color" value="<?= $bg ?>" id="color-<?= $bg ?>" class="hidden peer/<?= $bg ?>">
+                            <label for="color-<?= $bg ?>"
+                                title="<?= ucfirst($color['colorName']) ?>"
+                                class="w-8 h-8 rounded-full bg-<?= $bgNum ?> border-2 border-gray-300 cursor-pointer 
+                       peer-checked/<?= $bg ?>:ring-2 peer-checked/<?= $bg ?>:ring-indigo-500">
+                            </label>
                         <?php endforeach; ?>
                     </div>
+                    <p class="text-red-500 text-md"><?= $errors['productColor'] ?? "" ?></p>
                 </div>
+                                <?php endif; ?>
                 <!-- Sizes -->
-                <div class="mb-6">
-                    <p class="font-medium text-gray-700 mb-2">Size</p>
-                    <div class="flex space-x-2 flex-wrap">
-                        <button class="px-3 py-1 border rounded-md">XXS</button>
-                        <button class="px-3 py-1 border rounded-md">XS</button>
-                        <button class="px-3 py-1 border rounded-md bg-indigo-500 text-white">S</button>
-                        <button class="px-3 py-1 border rounded-md">M</button>
-                        <button class="px-3 py-1 border rounded-md">L</button>
-                        <button class="px-3 py-1 border rounded-md opacity-50 cursor-not-allowed">XL</button>
+                <?php if ($product["categoryName"] === "Clothies-Category") : ?>
+                    <div class="mb-6">
+                        <p class="font-medium text-gray-700 mb-2">Size</p>
+                        <div class="flex gap-2 flex-wrap">
+                            <?php foreach ($productSize as $size) : ?>
+                                <?php $sizeValue = strtolower($size['sizeName']); ?>
+                                <input type="radio" name="size" value="<?= $sizeValue ?>" id="size-<?= $sizeValue ?>" class="hidden peer/<?= $sizeValue ?>">
+                                <label for="size-<?= $sizeValue ?>"
+                                    class="px-3 py-1 border rounded-md cursor-pointer 
+                       peer-checked/<?= $sizeValue ?>:bg-indigo-500 peer-checked/<?= $sizeValue ?>:text-white peer-checked/<?= $sizeValue ?>:border-indigo-500">
+                                    <?= $size['sizeName'] ?>
+                                </label>
+                            <?php endforeach; ?>
+                        </div>
+                        <p class="text-red-500 text-md"><?= $errors['productSize'] ?? "" ?></p>
                     </div>
-                </div>
-
+                <?php endif; ?>
                 <!-- Add to Cart -->
                 <button class="w-full py-3 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 transition mb-6">
                     Add to Cart
                 </button>
-
                 <!-- Description -->
                 <div class="mb-6">
                     <h2 class="text-lg font-semibold text-gray-800 mb-2">Description</h2>
                     <p class="text-gray-600 text-sm">
-                        <?= $product['product']["productDescription"] ?>
+                        <?= $product["productDescription"] ?>
                     </p>
                 </div>
                 <!-- Fabric & Care -->

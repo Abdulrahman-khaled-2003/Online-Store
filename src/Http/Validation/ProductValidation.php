@@ -27,16 +27,20 @@ class ProductValidation
             $this->errors['productPrice'] = "Invalid Price!";
         }
 
-        if (! Validation::arrayValidate($attributes['sizes'] ?? null)) {
-            $this->errors['productSize'] = "Invalid Size Please Choose the Correct Size for Clothies!";
+        if ($attributes['category'] === "Clothies-Category" || $attributes['category'] === "Technology-Category") {
+            if (! Validation::arrayValidate($attributes['colors'] ?? null)) {
+                $this->errors['productColor'] = "Invalid Color Please Choose the Correct Color for Clothies!";
+            }
         }
 
-        if (! Validation::arrayValidate($attributes['color'] ?? null)) {
-            $this->errors['productColor'] = "Invalid Color Please Choose the Correct Color for Clothies!";
+        if ($attributes['category'] === "Clothies-Category") {
+            if (! Validation::arrayValidate($attributes['sizes'] ?? null)) {
+                $this->errors['productSize'] = "Invalid Size Please Choose the Correct Size for Clothies!";
+            }
         }
 
         if (! Validation::imageHandle($image, $attributes['product_name'])) {
-            $this->errors['productImage'] = "Invalid Extenstion of Image Please Enter Correct Ext!";
+            $this->errors['productImage'] = "Please Enter Correct Extension (png, jpg, jpeg)!";
         }
     }
 }

@@ -29,10 +29,10 @@ require base_path("Views/Partials/head.phtml");
                         <?php foreach ($products as $product) : ?>
                             <tr class="border-b hover:bg-gray-50 transition">
                                 <td class="px-6 py-4">
-                                    <img src="<?= $product['productImage'] ?>" alt="iPhone" class="w-24 h-24 rounded">
+                                    <img src="/assets/images/<?= $product['productImage'] ?>" alt="photo" class="w-24 h-24 rounded">
                                 </td>
                                 <td class="px-6 py-4"><?= $product['productName']  ?></td>
-                                <td class="px-6 py-4 max-w-xs truncate"> Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat magni harum ullam! Soluta, earum illum?</td>
+                                <td class="px-6 py-4 max-w-xs truncate"><?= $product['productDescription'] ?></td>
                                 <td class="px-6 py-4"><?= $product['categoryName'] ?></td>
                                 <td class="px-6 py-4">$<?= $product['productPrice'] ?></td>
                                 <td class="px-6 py-4 space-x-2">

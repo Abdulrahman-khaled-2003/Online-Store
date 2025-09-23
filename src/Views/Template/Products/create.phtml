@@ -46,7 +46,7 @@ require base_path("Views/Partials/head.phtml"); ?>
                             <?php $bgNum = strtolower($color['colorName']) . "-500";
                             $bg = strtolower($color['colorName']); ?>
                         <?php endif; ?>
-                        <input type="checkbox" name="color[]" value="<?= $bg ?>" id="color-<?= $bg ?>" class="hidden peer/<?= $bg ?>">
+                        <input type="checkbox" name="colors[]" value="<?= $bg ?>" id="color-<?= $bg ?>" class="hidden peer/<?= $bg ?>">
                         <label for="color-<?= $bg ?>"
                             title="<?= ucfirst($color['colorName']) ?>"
                             class="w-8 h-8 rounded-full bg-<?= $bgNum ?> border-2 border-gray-300 cursor-pointer 
