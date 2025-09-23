@@ -40,31 +40,31 @@ require base_path("Views/Partials/head.phtml");
                 </div>
 
                 <!-- Colors -->
-                 <?php if($product['categoryName'] === "Clothies-Category" || $product['categoryName'] === "Technology-Category") : ?>
-                <div class="mb-8">
-                    <p class="font-medium text-gray-700 mb-2">Color</p>
-                    <div class="flex gap-2 mt-2 flex-wrap">
-                        <?php foreach ($productColor as $color) : ?>
-                            <?php if (strtolower($color['colorName']) === "black" || strtolower($color['colorName']) === "white") : ?>
-                                <?php $bg = strtolower($color['colorName']);
-                                $bgNum = $bg; ?>
-                            <?php else: ?>
-                                <?php $bgNum = strtolower($color['colorName']) . "-500";
-                                $bg = strtolower($color['colorName']); ?>
-                            <?php endif; ?>
-                            <input type="radio" name="color" value="<?= $bg ?>" id="color-<?= $bg ?>" class="hidden peer/<?= $bg ?>">
-                            <label for="color-<?= $bg ?>"
-                                title="<?= ucfirst($color['colorName']) ?>"
-                                class="w-8 h-8 rounded-full bg-<?= $bgNum ?> border-2 border-gray-300 cursor-pointer 
-                       peer-checked/<?= $bg ?>:ring-2 peer-checked/<?= $bg ?>:ring-indigo-500">
-                            </label>
-                        <?php endforeach; ?>
-                    </div>
-                    <p class="text-red-500 text-md"><?= $errors['productColor'] ?? "" ?></p>
-                </div>
+                <?php if (checkColor($product['categoryName'])) : ?>
+                    <div class="mb-8">
+                        <p class="font-medium text-gray-700 mb-2">Color</p>
+                        <div class="flex gap-2 mt-2 flex-wrap">
+                            <?php foreach ($productColor as $color) : ?>
+                                <?php if (strtolower($color['colorName']) === "black" || strtolower($color['colorName']) === "white") : ?>
+                                    <?php $bg = strtolower($color['colorName']);
+                                    $bgNum = $bg; ?>
+                                <?php else: ?>
+                                    <?php $bgNum = strtolower($color['colorName']) . "-500";
+                                    $bg = strtolower($color['colorName']); ?>
                                 <?php endif; ?>
+                                <input type="radio" name="color" value="<?= $bg ?>" id="color-<?= $bg ?>" class="hidden peer/<?= $bg ?>">
+                                <label for="color-<?= $bg ?>"
+                                    title="<?= ucfirst($color['colorName']) ?>"
+                                    class="w-8 h-8 rounded-full bg-<?= $bgNum ?> border-2 border-gray-300 cursor-pointer 
+                       peer-checked/<?= $bg ?>:ring-2 peer-checked/<?= $bg ?>:ring-indigo-500">
+                                </label>
+                            <?php endforeach; ?>
+                        </div>
+                        <p class="text-red-500 text-md"><?= $errors['productColor'] ?? "" ?></p>
+                    </div>
+                <?php endif; ?>
                 <!-- Sizes -->
-                <?php if ($product["categoryName"] === "Clothies-Category") : ?>
+                <?php if (checkSize($product['categoryName'])) : ?>
                     <div class="mb-6">
                         <p class="font-medium text-gray-700 mb-2">Size</p>
                         <div class="flex gap-2 flex-wrap">

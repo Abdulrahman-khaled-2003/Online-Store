@@ -74,3 +74,20 @@ function db()
     }
     return $database;
 }
+
+
+function checkColor($category)
+{
+    if ($category === "Clothies-Category" || $category === "Technology-Category") {
+        return true;
+    }
+    return false;
+}
+
+function checkSize($category)
+{
+    if ($category === "Clothies-Category") {
+        return true;
+    }
+    return false;
+}

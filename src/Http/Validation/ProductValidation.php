@@ -27,13 +27,13 @@ class ProductValidation
             $this->errors['productPrice'] = "Invalid Price!";
         }
 
-        if ($attributes['category'] === "Clothies-Category" || $attributes['category'] === "Technology-Category") {
+        if (checkColor($attributes["category"])) {
             if (! Validation::arrayValidate($attributes['colors'] ?? null)) {
                 $this->errors['productColor'] = "Invalid Color Please Choose the Correct Color for Clothies!";
             }
         }
 
-        if ($attributes['category'] === "Clothies-Category") {
+        if (checkSize($attributes['category'])) {
             if (! Validation::arrayValidate($attributes['sizes'] ?? null)) {
                 $this->errors['productSize'] = "Invalid Size Please Choose the Correct Size for Clothies!";
             }
