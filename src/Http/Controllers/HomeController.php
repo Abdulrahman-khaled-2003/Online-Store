@@ -17,7 +17,7 @@ class HomeController
         $categories = [
             [
                 "id" => 1,
-                "CategoryName" =>  "Clothies Category",
+                "categoryName" =>  "Clothies Category",
                 "Products" => [
                     [
                         "ProductName" => "blue T-shirt",
@@ -64,7 +64,7 @@ class HomeController
             ],
             [
                 "id" => 2,
-                "CategoryName" =>  "Technology Category",
+                "categoryName" =>  "Technology Category",
                 "Products" => [
                     [
                         "ProductName" => "iPhone 15 Pro Max",
@@ -111,7 +111,7 @@ class HomeController
             ],
             [
                 "id" => 3,
-                "CategoryName" =>  "Vegetables&Fruits Category",
+                "categoryName" =>  "Vegetables&Fruits Category",
                 "Products" => [
                     [
                         "ProductName" => "Apple",

@@ -8,7 +8,7 @@ require base_path("Views/Partials/head.phtml") ?>
     <hr>
     <div class="bg-white mt-32">
         <?php foreach($categories as $category) : ?>
-        <h2 id="clothies" class="text-center font-bold text-5xl text-indigo-600"><?= $category["CategoryName"] ?></h2>
+        <h2 id="clothies" class="text-center font-bold text-5xl text-indigo-600"><?= $category["categoryName"] ?></h2>
         <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
             <div class="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
                 <?php foreach($category["Products"] as $product) : ?>
