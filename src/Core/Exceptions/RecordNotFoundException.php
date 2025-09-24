@@ -2,8 +2,8 @@
 
 namespace App\Core\Exception;
 
-use Exception;
+use RuntimeException;
 
-class RecordNotFoundException extends Exception{
+class RecordNotFoundException extends RuntimeException{
         //
 }

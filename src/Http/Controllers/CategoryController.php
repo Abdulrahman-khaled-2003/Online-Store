@@ -54,7 +54,7 @@ class CategoryController extends Controller
             $attributes["category-desc"],
             $attributes['category-img']
         ]);
-        Session::flash("AddedMessage", $attributes['category-name'] . " Added Successfully");
+        Session::flash("Success-Message", $attributes['category-name'] . " Added Successfully");
         redirect("/categories");
     }
 
@@ -84,17 +84,17 @@ class CategoryController extends Controller
             $attributes['category-img'],
             $attributes['id']
         ]);
-        Session::flash("UpdatedMessage", $attributes['category-name'] . " Updated Successfully");
+        Session::flash("Success-Message", $attributes['category-name'] . " Updated Successfully");
         redirect("/categories");
     }
 
     public function destroy(array $attributes)
     {
         if (!empty($this->getProducts($attributes['id']))) {
-            Session::flash("DeletedMessage", "You Can't Delete This Category Because Contain Some Products!");
+            Session::flash("Success-Message", "You Can't Delete This Category Because Contain Some Products!");
         } else {
             db()->execute("DELETE From categories where id = ?", [$attributes['id']]);
-            Session::flash("DeletedMessage", " Deleted Successfully");
+            Session::flash("Success-Message", " Deleted Successfully");
         }
 
         redirect("/categories");

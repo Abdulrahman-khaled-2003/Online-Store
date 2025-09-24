@@ -33,7 +33,7 @@
                             <div class="flex">
                                 <div class="relative flex">
                                     <div class="relative flex items-center">
-                                        <a href="/category/<?=$catego['id']?>/products"><?= $catego["categoryName"] ?></a>
+                                        <a href="/category/<?=$catego['id']?>/products"><?= htmlspecialchars($catego["categoryName"]) ?></a>
                                     </div>
                                 </div>
                             </div>

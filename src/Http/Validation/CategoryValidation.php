@@ -11,7 +11,7 @@ class CategoryValidation
     public $errors = [];
 
     public function __construct(array $attributes)
-    {;
+    {
         if (! Validation::textValidate($attributes['category-name'])) {
             $this->errors['categoryName'] = "Invalid Category Name!";
         }
@@ -22,6 +22,10 @@ class CategoryValidation
 
         if (! Validation::textValidate($attributes['category-img'])) {
             $this->errors['categoryImage'] = "Invalid Category Image!";
+        }
+
+        if (! Validation::imageValidate($attributes['category-img'])) {
+            $this->errors['categoryImage'] = "Invalid Extension!";
         }
     }
 }

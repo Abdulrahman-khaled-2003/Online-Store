@@ -42,8 +42,9 @@ function abort(int $code, string $message)
     die();
 }
 
-function redirect($path)
+function redirect($path, $code = 200)
 {
+    http_response_code($code);
     header("Location: {$path}");
     die();
 }
@@ -51,9 +52,10 @@ function redirect($path)
 function errorLog($error, $file, $line)
 {
     error_log(
-        "ُError: " . $error . " | " .
-            "File: " . $file . " | " .
-            "Line: " . $line . "\n",
+        "[Time] " . date('Y-m-d H:i:s') .  " | " .
+            "[Error] " . $error .  " | " .
+            "[File] " . $file .  " | " .
+            "[Line] " . $line .   "\n",
         3,
         __DIR__ . "/../../logs/error.log"
     );

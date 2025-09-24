@@ -2,8 +2,8 @@
 
 namespace App\Core\Exception;
 
-use Exception;
+use RuntimeException;
 
-class FileNotFoundException extends Exception{
+class FileNotFoundException extends RuntimeException{
     //
 }
