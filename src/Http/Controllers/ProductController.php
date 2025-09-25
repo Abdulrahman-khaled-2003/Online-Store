@@ -63,6 +63,18 @@ class ProductController extends Controller
         ]);
     }
 
+    public function edit(int $id)
+    {
+        $this->render("Products/edit", [
+            "categories" => $this->getCategories(),
+            "product" => $this->getProduct($id),
+            "colors" => $this->getColors(),
+            "sizes" => $this->getSizes(),
+            "productColor" => $this->getProductColors($id),
+            "productSize" => $this->getProductSizes($id)
+        ]);
+    }
+
     // Database helper function Query
 
     private function editProduct(int $id) {}

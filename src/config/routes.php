@@ -17,3 +17,4 @@ $router->get("/products/show/{id}", "ProductController::show");
 $router->get("/products/cards", "ProductController::indexCards");
 $router->get("/products/create/{id}", "ProductController::create");
 $router->post("/products/store" , "ProductController::store");
+$router->get("/products/edit/{id}" , "ProductController::edit");
