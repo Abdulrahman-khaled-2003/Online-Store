@@ -39,18 +39,13 @@ require base_path("Views/Partials/head.phtml"); ?>
                 <label class="block text-sm font-medium text-indigo-600">Color</label>
                 <div class="flex gap-2 mt-2 flex-wrap">
                     <?php foreach ($colors as $color) : ?>
-                        <?php $bg = strtolower($color["colorName"]);
-                        $bg =  ($bg === "black" || $bg === "white") ? $bg : $bg . "-500";
+                        <?php $bg = strtolower($color['colorName']);
+                        $bgNum =  ($bg === "black" || $bg === "white") ? $bg : $bg . "-500"
                         ?>
-                        <input type="checkbox"
-                            name="colors[]"
-                            value="<?= $bg ?>"
-                            id="color-<?= $bg ?>"
-                            class="hidden peer/<?= $bg ?>">
-                        <label
-                            for="color-<?= $bg ?>"
+                        <input type="checkbox" name="colors[]" value="<?= $bg ?>" id="color-<?= $bg ?>" class="hidden peer/<?= $bg ?>">
+                        <label for="color-<?= $bg ?>"
                             title="<?= ucfirst($color['colorName']) ?>"
-                            class="w-8 h-8 rounded-full bg-<?= $bg ?> border-2 border-gray-300 cursor-pointer 
+                            class="w-8 h-8 rounded-full bg-<?= $bgNum ?> border-2 border-gray-300 cursor-pointer 
                            peer-checked/<?= $bg ?>:ring-2 peer-checked/<?= $bg ?>:ring-indigo-500">
                         </label>
                     <?php endforeach; ?>

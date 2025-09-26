@@ -9,8 +9,12 @@ require base_path("Core/Validation.php");
 class ProductValidation
 {
     public $errors = [];
+    private $method;
+
     public function __construct(array $attributes, array $image)
     {
+        $this->method = $attributes['_method'] ?? [];
+
         if (! Validation::textValidate($attributes['product_name'])) {
             $this->errors['productName'] = "Invalid Product Name!";
         }
@@ -38,9 +42,10 @@ class ProductValidation
                 $this->errors['productSize'] = "Invalid Size Please Choose the Correct Size for Clothies!";
             }
         }
-
-        if (! Validation::imageHandle($image, $attributes['product_name'])) {
-            $this->errors['productImage'] = "Please Enter Correct Extension (png, jpg, jpeg)!";
+        if ($this->method != "PUT") {
+            if (! Validation::imageHandle($image, $attributes['product_name'])) {
+                $this->errors['productImage'] = "Please Enter Correct Extension (png, jpg, jpeg)!";
+            }
         }
     }
 }

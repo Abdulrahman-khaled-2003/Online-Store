@@ -8,7 +8,8 @@ require base_path("Views/Partials/head.phtml"); ?>
 
     <form action="/products/update" method="POST" enctype="multipart/form-data"
         class=" mt-14 max-w-3xl mx-auto bg-white shadow-md rounded-xl p-6 space-y-6">
-        <input type="hidden" name="id" value="<?= $category['id'] ?>">
+        <input type="hidden" name="id" value="<?= $product['id'] ?>">
+        <input type="hidden" name="_method" value="PUT">
         <h2 class="text-2xl font-bold text-indigo-700">Edit Product</h2>
 
         <!-- Product Name -->
@@ -42,7 +43,7 @@ require base_path("Views/Partials/head.phtml"); ?>
                     <?php foreach ($colors as $color): ?>
                         <?php
                         $bg = strtolower($color['colorName']);
-                        $bg = ($bg === "black" || $bg === "white") ? $bg : $bg . "-500";
+                        $bgNum = ($bg === "black" || $bg === "white") ? $bg : $bg . "-500";
 
                         $isChecked = in_array($color['colorName'], array_column($productColor, 'colorName')); ?>
                         <input type="checkbox"
@@ -54,7 +55,7 @@ require base_path("Views/Partials/head.phtml"); ?>
 
                         <label for="color-<?= $bg ?>"
                             title="<?= ucfirst($color['colorName']) ?>"
-                            class="w-8 h-8 rounded-full bg-<?= $bg ?> border-2 border-gray-300 cursor-pointer 
+                            class="w-8 h-8 rounded-full bg-<?= $bgNum ?> border-2 border-gray-300 cursor-pointer 
         peer-checked/<?= $bg ?>:ring-2 peer-checked/<?= $bg ?>:ring-indigo-500">
                         </label>
                     <?php endforeach; ?>
@@ -95,10 +96,10 @@ require base_path("Views/Partials/head.phtml"); ?>
                file:text-sm file:font-semibold 
                file:bg-indigo-50 file:text-indigo-700 
                hover:file:bg-indigo-100 cursor-pointer" />
-            <p class="text-red-500 text-md"><?= $errors['productImage'] ?? "" ?></p>
+            <p class="text-red-500 text-md"></p>
         </div>
-        <!-- Show old image -->
         <?php if (!empty($product['productImage'])): ?>
+            <!-- Show old image -->
             <div class="mb-3">
                 <img src="/assets/images/<?= htmlspecialchars($product['productImage']) ?>"
                     alt="Old Product Image"

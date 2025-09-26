@@ -47,9 +47,7 @@ class ProductController extends Controller
     public function store(array $attributes): void
     {
         $this->validated = new ProductValidation($attributes, $_FILES);
-        if (! empty($this->validated->errors)) {
-            $this->create($attributes['id']);
-        }
+        (! empty($this->validated->errors)) ? $this->create($attributes['id']) : false;
         $extenstion = pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION);
         $this->createProduct($attributes, $extenstion);
         Session::flash("Success-Message", $attributes['product_name'] . " Added Successfuly!");
@@ -66,6 +64,7 @@ class ProductController extends Controller
     public function edit(int $id)
     {
         $this->render("Products/edit", [
+            "errors" => $this->validated->errors ?? null,
             "categories" => $this->getCategories(),
             "product" => $this->getProduct($id),
             "colors" => $this->getColors(),
@@ -75,9 +74,50 @@ class ProductController extends Controller
         ]);
     }
 
-    // Database helper function Query
+    public function update(array $attributes)
+    {
+        $this->validated = new ProductValidation($attributes, $_FILES);
+        (! empty($this->validated->errors)) ? $this->edit($attributes['id']) : false;
+        $extension = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
+        $this->editProduct($attributes, $extension);
+        redirect("/products");
+    }
 
-    private function editProduct(int $id) {}
+    // Database helper function Query
+    private function editProduct(array $attributes, string $extension)
+    {
+        db()->execute("UPDATE products set productName = ? , productImage = ? , productDescription = ? , productPrice = ? 
+        where id = ?", [
+            $attributes['product_name'],
+            $attributes['product_name'] . "." . $extension,
+            $attributes['description'],
+            $attributes['price'],
+            $attributes['id']
+        ]);
+
+        $colors = $attributes['colors'] ?? [];
+        $sizes = $attributes['sizes'] ?? [];
+
+        db()->execute("DELETE FROM product_color WHERE product_id = ?", [$attributes['id']]);
+
+        foreach ($colors as $color) {
+            $colorID = $this->getColorID($color);
+            db()->execute("INSERT INTO product_color (`color_id` , `product_id`) VALUES (? , ?)", [
+                $colorID['id'],
+                $attributes['id']
+            ]);
+        }
+
+        db()->execute("DELETE FROM product_size where product_id = ?", [$attributes['id']]);
+
+        foreach ($sizes as $size) {
+            $sizeID = $this->getSizeID($size);
+            db()->execute("INSERT INTO product_size (`size_id` , `product_id`) VALUES (? , ?)", [
+                $sizeID['id'],
+                $attributes['id']
+            ]);
+        }
+    }
 
     private function deleteProduct(int $id) {}
 

@@ -18,3 +18,4 @@ $router->get("/products/cards", "ProductController::indexCards");
 $router->get("/products/create/{id}", "ProductController::create");
 $router->post("/products/store" , "ProductController::store");
 $router->get("/products/edit/{id}" , "ProductController::edit");
+$router->put("/products/update" , "ProductController::update");
