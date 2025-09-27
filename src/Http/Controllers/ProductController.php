@@ -47,7 +47,10 @@ class ProductController extends Controller
     public function store(array $attributes): void
     {
         $this->validated = new ProductValidation($attributes, $_FILES);
-        (! empty($this->validated->errors)) ? $this->create($attributes['id']) : false;
+        if (! empty($this->validated->errors)) {
+            $this->create($attributes['id']);
+            die();
+        }
         $extenstion = pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION);
         $this->createProduct($attributes, $extenstion);
         Session::flash("Success-Message", $attributes['product_name'] . " Added Successfuly!");
@@ -81,6 +84,14 @@ class ProductController extends Controller
         $oldImage = $this->getProductImage($attributes['id']);
         $extension = checkImage($_FILES, $oldImage);
         $this->editProduct($attributes, $extension);
+        Session::flash("Success-Message", $attributes['product_name'] . " Updated Successfully!");
+        redirect("/products");
+    }
+
+    public function destroy(array $attributes)
+    {
+        $this->deleteProduct($attributes['id']);
+        Session::flash("Success-Message", "Product Deleted Successfully");
         redirect("/products");
     }
 
@@ -120,7 +131,10 @@ class ProductController extends Controller
         }
     }
 
-    private function deleteProduct(int $id) {}
+    private function deleteProduct(int $id)
+    {
+        db()->execute("DELETE FROM products where id = ?", [$id]);
+    }
 
     private function getCategories(): array
     {

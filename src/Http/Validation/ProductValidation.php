@@ -50,6 +50,7 @@ class ProductValidation extends Validation
                 $this->errors['productImage'] = "Invalid Extension Please Enter Correct Extension (PNG, JPG, JPEG)!";
             }
         }
+        
 
         if ($this->method === "PUT" && $image['image']['name'] != "") {
             if (! $this->imageHandle($image, $attributes['product_name'])) {

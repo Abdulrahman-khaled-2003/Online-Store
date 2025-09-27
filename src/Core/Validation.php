@@ -25,7 +25,6 @@ abstract class Validation
     protected function imageValidate($image)
     {
         return ($image['image']['name'] === "") ? false : true;
-
     }
 
     protected function imageHandle(array $image, string $productName)
@@ -39,8 +38,9 @@ abstract class Validation
         if (! in_array($imgExtension, $extension)) {
             return false;
         }
-
         $imgPath = base_path("../public/assets/images/");
+
+        
         if (move_uploaded_file($imgTmp, $imgPath . $productName . "." . $imgExtension)) {
             return true;
         }
