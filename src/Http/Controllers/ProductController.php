@@ -78,13 +78,14 @@ class ProductController extends Controller
     {
         $this->validated = new ProductValidation($attributes, $_FILES);
         (! empty($this->validated->errors)) ? $this->edit($attributes['id']) : false;
-        $extension = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
+        $oldImage = $this->getProductImage($attributes['id']);
+        $extension = checkImage($_FILES, $oldImage);
         $this->editProduct($attributes, $extension);
         redirect("/products");
     }
 
     // Database helper function Query
-    private function editProduct(array $attributes, string $extension)
+    private function editProduct(array $attributes, ?string $extension)
     {
         db()->execute("UPDATE products set productName = ? , productImage = ? , productDescription = ? , productPrice = ? 
         where id = ?", [
@@ -133,6 +134,11 @@ class ProductController extends Controller
             throw new RecordNotFoundException("Category with ID {$id} not found!");
         }
         return $categoryNameAndId;
+    }
+
+    private function getProductImage(int $id): array
+    {
+        return db()->fetch("SELECT productImage from products where id = ? ", [$id]);
     }
 
     private function getColorID(string $colorName): array

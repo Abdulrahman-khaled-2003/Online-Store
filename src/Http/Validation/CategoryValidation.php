@@ -6,26 +6,26 @@ use App\Core\Validation;
 
 require base_path("Core/Validation.php");
 
-class CategoryValidation
+class CategoryValidation extends Validation
 {
     public $errors = [];
 
     public function __construct(array $attributes)
     {
-        if (! Validation::textValidate($attributes['category-name'])) {
+        if (! $this->textValidate($attributes['category-name'])) {
             $this->errors['categoryName'] = "Invalid Category Name!";
         }
 
-        if (! Validation::textValidate($attributes['category-desc'])) {
+        if (! $this->textValidate($attributes['category-desc'])) {
             $this->errors['categoryDescription'] = "Invalid Category Description!";
         }
 
-        if (! Validation::textValidate($attributes['category-img'])) {
+        if (! $this->textValidate($attributes['category-img'])) {
             $this->errors['categoryImage'] = "Invalid Category Image!";
         }
 
-        if (! Validation::imageValidate($attributes['category-img'])) {
-            $this->errors['categoryImage'] = "Invalid Extension!";
-        }
+        // if (! Validation::imageHandle($attributes['category-img'])) {
+        //     $this->errors['categoryImage'] = "Invalid Extension!";
+        // }
     }
 }

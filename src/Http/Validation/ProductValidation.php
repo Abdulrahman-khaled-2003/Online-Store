@@ -6,7 +6,7 @@ use App\Core\Validation;
 
 require base_path("Core/Validation.php");
 
-class ProductValidation
+class ProductValidation extends Validation
 {
     public $errors = [];
     private $method;
@@ -15,36 +15,45 @@ class ProductValidation
     {
         $this->method = $attributes['_method'] ?? [];
 
-        if (! Validation::textValidate($attributes['product_name'])) {
+        if (! $this->textValidate($attributes['product_name'])) {
             $this->errors['productName'] = "Invalid Product Name!";
         }
 
-        if (! Validation::textValidate($attributes['description'])) {
+        if (! $this->textValidate($attributes['description'])) {
             $this->errors['productDescription'] = "Invalid Description!";
         }
 
-        if (! Validation::checkNum($attributes["price"])) {
+        if (! $this->checkNum($attributes["price"])) {
             $this->errors['productPrice'] = "Invalid Price Please Enter the Correct Price!";
         }
 
-        if (! Validation::textValidate($attributes['price'])) {
+        if (! $this->textValidate($attributes['price'])) {
             $this->errors['productPrice'] = "Invalid Price!";
         }
 
         if (checkColor($attributes["category"])) {
-            if (! Validation::arrayValidate($attributes['colors'] ?? null)) {
+            if (! $this->arrayValidate($attributes['colors'] ?? null)) {
                 $this->errors['productColor'] = "Invalid Color Please Choose the Correct Color for Clothies!";
             }
         }
 
         if (checkSize($attributes['category'])) {
-            if (! Validation::arrayValidate($attributes['sizes'] ?? null)) {
+            if (! $this->arrayValidate($attributes['sizes'] ?? null)) {
                 $this->errors['productSize'] = "Invalid Size Please Choose the Correct Size for Clothies!";
             }
         }
+
         if ($this->method != "PUT") {
-            if (! Validation::imageHandle($image, $attributes['product_name'])) {
-                $this->errors['productImage'] = "Please Enter Correct Extension (png, jpg, jpeg)!";
+            if (! $this->imageValidate($image)) {
+                $this->errors['productImage'] = "Please Enter Image of Product!";
+            } elseif (! $this->imageHandle($image, $attributes['product_name'])) {
+                $this->errors['productImage'] = "Invalid Extension Please Enter Correct Extension (PNG, JPG, JPEG)!";
+            }
+        }
+
+        if ($this->method === "PUT" && $image['image']['name'] != "") {
+            if (! $this->imageHandle($image, $attributes['product_name'])) {
+                $this->errors['productImage'] = "Invalid Extension Please Enter Correct Extension (PNG, JPG, JPEG)!";
             }
         }
     }
