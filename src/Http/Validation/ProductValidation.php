@@ -8,9 +8,6 @@ require base_path("Core/Validation.php");
 
 class ProductValidation extends Validation
 {
-    public $errors = [];
-    private $method;
-
     public function __construct(array $attributes, array $image)
     {
         $this->method = $attributes['_method'] ?? [];
@@ -44,16 +41,15 @@ class ProductValidation extends Validation
         }
 
         if ($this->method != "PUT") {
-            if (! $this->imageValidate($image)) {
+            if (! $this->isImage($image)) {
                 $this->errors['productImage'] = "Please Enter Image of Product!";
-            } elseif (! $this->imageHandle($image, $attributes['product_name'])) {
+            } elseif (! $this->moveProductImage($image, $attributes['product_name'])) {
                 $this->errors['productImage'] = "Invalid Extension Please Enter Correct Extension (PNG, JPG, JPEG)!";
             }
         }
-        
 
         if ($this->method === "PUT" && $image['image']['name'] != "") {
-            if (! $this->imageHandle($image, $attributes['product_name'])) {
+            if (! $this->moveProductImage($image, $attributes['product_name'])) {
                 $this->errors['productImage'] = "Invalid Extension Please Enter Correct Extension (PNG, JPG, JPEG)!";
             }
         }

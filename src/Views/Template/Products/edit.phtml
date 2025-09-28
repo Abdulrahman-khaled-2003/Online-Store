@@ -102,7 +102,7 @@ require base_path("Views/Partials/head.phtml"); ?>
         <?php if (!empty($product['productImage'])): ?>
             <!-- Show old image -->
             <div class="mb-3">
-                <img src="/assets/images/<?= htmlspecialchars($product['productImage']) ?>"
+                <img src="/assets/images/Products/<?= htmlspecialchars($product['productImage']) ?>"
                     alt="Old Product Image"
                     class="w-32 h-32 object-cover rounded-lg shadow-md border" />
                 <p class="text-gray-500 text-sm mt-1">Current Image</p>

@@ -4,6 +4,11 @@ namespace App\Core;
 
 abstract class Validation
 {
+    private $imgTmp;
+    private $imgExtension;
+    protected $method;
+    public $errors = [];
+
     protected function textValidate(string $value, int $min = 1, int $max = 100): bool
     {
         $value = trim($value);
@@ -22,27 +27,32 @@ abstract class Validation
         return (!is_array($array) || empty($array)) ? false : true;
     }
 
-    protected function imageValidate($image)
+    protected function isImage($image)
     {
         return ($image['image']['name'] === "") ? false : true;
     }
 
-    protected function imageHandle(array $image, string $productName)
+    private function imageHandle($image)
     {
         $imgData = $image['image'];
         $imgName = $imgData['name'];
-        $imgTmp = $imgData['tmp_name'];
+        $this->imgTmp = $imgData['tmp_name'];
         $extension = ["png", "jpg", "jpeg"];
-        $imgExtension = strtolower(pathinfo($imgName, PATHINFO_EXTENSION));
+        $this->imgExtension = strtolower(pathinfo($imgName, PATHINFO_EXTENSION));
+        extensionValidate($this->imgExtension, $extension);
+    }
 
-        if (! in_array($imgExtension, $extension)) {
-            return false;
-        }
-        $imgPath = base_path("../public/assets/images/");
+    protected function moveProductImage($image, $productName)
+    {
+        $this->imageHandle($image);
+        $imgPath = base_path("../public/assets/images/Products/");
+        moveUploadedFile($this->imgTmp, $imgPath . $productName . "." . $this->imgExtension);
+    }
 
-        
-        if (move_uploaded_file($imgTmp, $imgPath . $productName . "." . $imgExtension)) {
-            return true;
-        }
+    protected function moveCategoryImage($image, $categoryName)
+    {
+        $this->imageHandle($image);
+        $imgPath = base_path("../public/assets/images/Categories/");
+        moveUploadedFile($this->imgTmp, $imgPath . $categoryName . "." . $this->imgExtension);
     }
 }

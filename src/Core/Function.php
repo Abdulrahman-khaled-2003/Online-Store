@@ -1,6 +1,7 @@
 <?php
 
 use App\Core\Database;
+use App\Core\Exception\FileNotFoundException;
 
 require "Database.php";
 
@@ -88,24 +89,6 @@ function checkSize($category)
     return ($category === "Clothies-Category") ? true : false;
 }
 
-function imageHandle($image, $productName)
-{
-    $imgData = $image['image'];
-    $imgName = $imgData['name'];
-    $imgTmp = $imgData['tmp_name'];
-    $extension = ["png", "jpg", "jpeg"];
-    $imgExtension = strtolower(pathinfo($imgName, PATHINFO_EXTENSION));
-
-    if (! in_array($imgExtension, $extension)) {
-        return false;
-    }
-
-    $imgPath = base_path("../public/assets/images/");
-    if (move_uploaded_file($imgTmp, $imgPath . $productName . "." . $imgExtension)) {
-        return true;
-    }
-}
-
 function checkImage($newImage, $oldImage)
 {
     if ($newImage['image']['name'] === "") {
@@ -115,4 +98,20 @@ function checkImage($newImage, $oldImage)
         $extension = pathinfo($newImage['image']['name'], PATHINFO_EXTENSION);
     }
     return $extension;
+}
+
+function extensionValidate($imgExtension, $extension)
+{
+    if (! in_array($imgExtension, $extension)) {
+        return false;
+    }
+    return true;
+}
+
+function moveUploadedFile($fileName, $destination)
+{
+    if (move_uploaded_file($fileName, $destination)) {
+        return true;
+    }
+    throw new FileNotFoundException("File Of Image Not Found!");
 }

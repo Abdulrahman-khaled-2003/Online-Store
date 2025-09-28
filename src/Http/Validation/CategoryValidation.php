@@ -8,10 +8,11 @@ require base_path("Core/Validation.php");
 
 class CategoryValidation extends Validation
 {
-    public $errors = [];
-
-    public function __construct(array $attributes)
+    public function __construct(array $attributes, array $image)
     {
+
+        $this->method = $attributes['_method'] ?? [];
+
         if (! $this->textValidate($attributes['category-name'])) {
             $this->errors['categoryName'] = "Invalid Category Name!";
         }
@@ -20,12 +21,18 @@ class CategoryValidation extends Validation
             $this->errors['categoryDescription'] = "Invalid Category Description!";
         }
 
-        if (! $this->textValidate($attributes['category-img'])) {
-            $this->errors['categoryImage'] = "Invalid Category Image!";
+        if ($this->method != "PUT") {
+            if (! $this->isImage($image)) {
+                $this->errors['categoryImage'] = "Please Enter Image of Category!";
+            } elseif (! $this->moveCategoryImage($image, $attributes['category-name'])) {
+                $this->errors['categoryImage'] = "Invalid Extension Please Enter Correct Extension (PNG, JPG, JPEG)!";
+            }
         }
 
-        // if (! Validation::imageHandle($attributes['category-img'])) {
-        //     $this->errors['categoryImage'] = "Invalid Extension!";
-        // }
+        if ($this->method === "PUT" && $image['image']['name'] != "") {
+            if (! $this->moveCategoryImage($image, $attributes['category-name'])) {
+                $this->errors['categoryImage'] = "Invalid Extension Please Enter Correct Extension (PNG, JPG, JPEG)!";
+            }
+        }
     }
 }

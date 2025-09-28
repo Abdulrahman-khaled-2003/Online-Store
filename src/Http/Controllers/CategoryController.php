@@ -15,12 +15,12 @@ class CategoryController extends Controller
 {
     public function show(int $id)
     {
-            view("Category/show", [
-                "products" => $this->getProducts($id),
-                "category" => $this->getCategory($id),
-                "categories" => $this->getCategories()
-            ]);
-            die();
+        view("Category/show", [
+            "products" => $this->getProducts($id),
+            "category" => $this->getCategory($id),
+            "categories" => $this->getCategories()
+        ]);
+        die();
     }
 
     public function index()
@@ -39,7 +39,7 @@ class CategoryController extends Controller
 
     public function store(array $attributes)
     {
-        $validated = new CategoryValidation($attributes);
+        $validated = new CategoryValidation($attributes, $_FILES);
 
         if (!empty($validated->errors)) {
             $this->render("Categories/create", [
@@ -47,12 +47,13 @@ class CategoryController extends Controller
                 "errors" => $validated->errors
             ]);
         }
+        $extenstion = pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION);
 
-        db()->execute("INSERT INTO categories (categoryName , description , image) 
+        db()->execute("INSERT INTO categories (categoryName , categoryDescription , categoryImage) 
         VALUE (?, ?, ?)", [
             $attributes['category-name'],
             $attributes["category-desc"],
-            $attributes['category-img']
+            $attributes['category-name'] . "." . $extenstion
         ]);
         Session::flash("Success-Message", $attributes['category-name'] . " Added Successfully");
         redirect("/categories");
@@ -68,7 +69,7 @@ class CategoryController extends Controller
 
     public function update(array $attributes)
     {
-        $validated = new CategoryValidation($attributes);
+        $validated = new CategoryValidation($attributes, $_FILES);
 
         if (! empty($validated->errors)) {
             $this->render("Categories/edit", [
@@ -78,10 +79,13 @@ class CategoryController extends Controller
             ]);
         }
 
-        db()->execute("UPDATE categories set categoryName = ? , description = ? , image = ? where id = ?", [
+        $oldImage = $this->getCategoryImage($attributes['id']);
+        $extension = checkImage($_FILES, $oldImage);
+
+        db()->execute("UPDATE categories set categoryName = ? , categoryDescription = ? , categoryImage = ? where id = ?", [
             $attributes['category-name'],
             $attributes['category-desc'],
-            $attributes['category-img'],
+            $attributes['category-image'],
             $attributes['id']
         ]);
         Session::flash("Success-Message", $attributes['category-name'] . " Updated Successfully");
@@ -118,5 +122,10 @@ class CategoryController extends Controller
     private function getProducts(int $id)
     {
         return db()->fetchAll("SELECT * FROM products where category_id = ?", [$id]);
+    }
+
+    private function getCategoryImage(int $id)
+    {
+        return db()->fetch("SELECT categoryImage FROM categories where id = ?", [$id]);
     }
 }
