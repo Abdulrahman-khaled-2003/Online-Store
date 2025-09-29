@@ -5,8 +5,9 @@ namespace App\Core;
 class Session
 {
 
-    public static function has(string $key): bool{
-        return $_SESSION['_flash'][$key] ?? $_SESSION[$key] ?? false ;
+    public static function has(string $key): bool
+    {
+        return $_SESSION['_flash'][$key] ?? $_SESSION[$key] ?? false;
     }
 
     public static function put(string $key, string | float $value)
@@ -14,12 +15,12 @@ class Session
         $_SESSION[$key] = $value;
     }
 
-    public static function get(string $key) : ?string
+    public static function get(string $key)
     {
         return $_SESSION['_flash'][$key] ?? $_SESSION[$key] ?? null;
     }
 
-    public static function flash(string $key, string | int $value)
+    public static function flash(string $key, string | float $value)
     {
         $_SESSION['_flash'][$key] = $value;
     }
