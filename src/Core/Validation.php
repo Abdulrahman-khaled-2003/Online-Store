@@ -8,7 +8,6 @@ abstract class Validation
 {
     private $imgTmp;
     private $imgExtension;
-    private $bool;
     protected $method;
     public $errors = [];
 
