@@ -2,10 +2,13 @@
 
 namespace App\Core;
 
+use App\Core\Exception\FileNotFoundException;
+
 abstract class Validation
 {
     private $imgTmp;
     private $imgExtension;
+    private $bool;
     protected $method;
     public $errors = [];
 
@@ -32,27 +35,38 @@ abstract class Validation
         return ($image['image']['name'] === "") ? false : true;
     }
 
-    private function imageHandle($image)
+    private function imageHandle($image): bool
     {
         $imgData = $image['image'];
         $imgName = $imgData['name'];
         $this->imgTmp = $imgData['tmp_name'];
         $extension = ["png", "jpg", "jpeg"];
         $this->imgExtension = strtolower(pathinfo($imgName, PATHINFO_EXTENSION));
-        extensionValidate($this->imgExtension, $extension);
+        return extensionValidate($this->imgExtension, $extension);
     }
 
     protected function moveProductImage($image, $productName)
     {
-        $this->imageHandle($image);
+        if (! $this->imageHandle($image)) {
+            return false;
+        }
         $imgPath = base_path("../public/assets/images/Products/");
-        moveUploadedFile($this->imgTmp, $imgPath . $productName . "." . $this->imgExtension);
+        if (! file_exists($imgPath)) {
+            throw new FileNotFoundException("File of Image Not Found!");
+        }
+        return moveUploadedFile($this->imgTmp, $imgPath . $productName . "." . $this->imgExtension);
     }
 
     protected function moveCategoryImage($image, $categoryName)
     {
         $this->imageHandle($image);
+        if ($this->bool === false) {
+            return false;
+        }
         $imgPath = base_path("../public/assets/images/Categories/");
-        moveUploadedFile($this->imgTmp, $imgPath . $categoryName . "." . $this->imgExtension);
+        if (! file_exists($imgPath)) {
+            throw new FileNotFoundException("File of Image Not Found!");
+        }
+        return  moveUploadedFile($this->imgTmp, $imgPath . $categoryName . "." . $this->imgExtension);
     }
 }

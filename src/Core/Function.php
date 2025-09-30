@@ -110,8 +110,5 @@ function extensionValidate($imgExtension, $extension)
 
 function moveUploadedFile($fileName, $destination)
 {
-    if (move_uploaded_file($fileName, $destination)) {
-        return true;
-    }
-    throw new FileNotFoundException("File Of Image Not Found!");
+    return move_uploaded_file($fileName, $destination);
 }
