@@ -58,8 +58,7 @@ abstract class Validation
 
     protected function moveCategoryImage($image, $categoryName)
     {
-        $this->imageHandle($image);
-        if ($this->bool === false) {
+        if (! $this->imageHandle($image)) {
             return false;
         }
         $imgPath = base_path("../public/assets/images/Categories/");
