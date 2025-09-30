@@ -5,9 +5,8 @@ namespace App\Core;
 class Session
 {
 
-    public static function has(string $key): bool
-    {
-        return $_SESSION['_flash'][$key] ?? $_SESSION[$key] ?? false;
+    public static function has(string $key): bool{
+        return $_SESSION['_flash'][$key] ?? $_SESSION[$key] ?? false ;
     }
 
     public static function put(string $key, string | float $value)

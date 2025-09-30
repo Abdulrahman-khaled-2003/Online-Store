@@ -15,12 +15,12 @@ class CategoryController extends Controller
 {
     public function show(int $id)
     {
-        view("Category/show", [
-            "products" => $this->getProducts($id),
-            "category" => $this->getCategory($id),
-            "categories" => $this->getCategories()
-        ]);
-        die();
+            view("Category/show", [
+                "products" => $this->getProducts($id),
+                "category" => $this->getCategory($id),
+                "categories" => $this->getCategories()
+            ]);
+            die();
     }
 
     public function index()
