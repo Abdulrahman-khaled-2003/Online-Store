@@ -80,7 +80,10 @@ class ProductController extends Controller
     public function update(array $attributes)
     {
         $this->validated = new ProductValidation($attributes, $_FILES);
-        (! empty($this->validated->errors)) ? $this->edit($attributes['id']) : false;
+        if (! empty($this->validated->errors)) {
+            $this->edit($attributes['id']);
+            die();
+        }
         $oldImage = $this->getProductImage($attributes['id']);
         $extension = checkImage($_FILES, $oldImage);
         $this->editProduct($attributes, $extension);
