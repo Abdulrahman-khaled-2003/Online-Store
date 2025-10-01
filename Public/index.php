@@ -7,11 +7,15 @@ session_start();
 
 require __DIR__ . ("/../src/Core/Function.php");
 
-require base_path("Core/Router.php");
+spl_autoload_register(function ($class) {
+    $class = str_replace("\\", "/", $class);
+    $class = str_replace("App/", "", $class);
+    require base_path("{$class}.php");
+});
 
-use App\Core\Exception\RecordNotFoundException;
+use App\Core\Exceptions\RecordNotFoundException;
+use App\Core\Router;
 use Exception;
-use Core\Router;
 
 $uri = parse_url($_SERVER['REQUEST_URI'])["path"];
 $method = $_POST["_method"] ?? $_SERVER["REQUEST_METHOD"];

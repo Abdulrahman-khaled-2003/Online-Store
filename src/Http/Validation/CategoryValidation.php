@@ -4,8 +4,6 @@ namespace App\Http\Validation;
 
 use App\Core\Validation;
 
-require base_path("Core/Validation.php");
-
 class CategoryValidation extends Validation
 {
     public function __construct(array $attributes, array $image)

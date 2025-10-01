@@ -1,10 +1,8 @@
 <?php
 
-namespace Core;
+namespace App\Core;
 
-use App\Core\Exception\FileNotFoundException;
-
-require "Exceptions/FileNotFoundException.php";
+use App\Core\Exceptions\FileNotFoundException;
 
 class Router
 {
@@ -63,8 +61,6 @@ class Router
                     if (! file_exists(base_path("Http/Controllers/{$className}.php"))) {
                         throw new FileNotFoundException("{$className} Class Not Found!");
                     }
-
-                    require base_path("Http/Controllers/{$className}.php");
 
                     $className = "\App\Http\Controllers\\" . $className;
 

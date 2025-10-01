@@ -2,14 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Core\Exception\RecordNotFoundException;
+use App\Core\Exceptions\RecordNotFoundException;
 use App\Core\Session;
 use App\Http\Validation\ProductValidation;
-
-require base_path("./Core/Exceptions/RecordNotFoundException.php");
-require base_path("./Core/Session.php");
-require base_path("Http/Validation/ProductValidation.php");
-require "Controller.php";
 
 class ProductController extends Controller
 {

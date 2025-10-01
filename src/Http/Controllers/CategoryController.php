@@ -2,14 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Core\Exception\RecordNotFoundException;
+use App\Core\Exceptions\RecordNotFoundException;
 use App\Core\Session;
 use App\Http\Validation\CategoryValidation;
-
-require base_path("./Core/Exceptions/RecordNotFoundException.php");
-require base_path("./Core/Session.php");
-require base_path("Http/Validation/CategoryValidation.php");
-require "Controller.php";
 
 class CategoryController extends Controller
 {

@@ -1,9 +1,6 @@
 <?php
 
 use App\Core\Database;
-use App\Core\Exception\FileNotFoundException;
-
-require "Database.php";
 
 function dd($value)
 {
