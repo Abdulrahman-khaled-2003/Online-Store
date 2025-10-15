@@ -5,6 +5,7 @@ namespace App\Http\Validation;
 use App\Core\Validation;
 
 require base_path("Core/Validation.php");
+require "ImageHandler.php";
 
 class CategoryValidation extends Validation
 {
@@ -24,13 +25,13 @@ class CategoryValidation extends Validation
         if ($this->method != "PUT") {
             if (! $this->isImage($image)) {
                 $this->errors['categoryImage'] = "Please Enter Image of Category!";
-            } elseif (! $this->moveCategoryImage($image, $attributes['category-name'])) {
+            } elseif (! (new ImageHandler)->moveCategoryImage($image, $attributes['category-name'])) {
                 $this->errors['categoryImage'] = "Invalid Extension Please Enter Correct Extension (PNG, JPG, JPEG)!";
             }
         }
 
         if ($this->method === "PUT" && $image['image']['name'] != "") {
-            if (! $this->moveCategoryImage($image, $attributes['category-name'])) {
+            if (! (new ImageHandler)->moveCategoryImage($image, $attributes['category-name'])) {
                 $this->errors['categoryImage'] = "Invalid Extension Please Enter Correct Extension (PNG, JPG, JPEG)!";
             }
         }

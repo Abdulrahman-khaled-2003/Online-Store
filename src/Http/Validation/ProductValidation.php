@@ -3,8 +3,10 @@
 namespace App\Http\Validation;
 
 use App\Core\Validation;
+use App\Http\Validation\ImageHandler;
 
 require base_path("Core/Validation.php");
+require "ImageHandler.php";
 
 class ProductValidation extends Validation
 {
@@ -20,7 +22,7 @@ class ProductValidation extends Validation
             $this->errors['productDescription'] = "Invalid Description!";
         }
 
-        if (! $this->checkNum($attributes["price"])) {
+        if (! $this->isNumeric($attributes["price"])) {
             $this->errors['productPrice'] = "Invalid Price Please Enter the Correct Price!";
         }
 
@@ -29,13 +31,13 @@ class ProductValidation extends Validation
         }
 
         if (checkColor($attributes["category"])) {
-            if (! $this->arrayValidate($attributes['colors'] ?? null)) {
+            if (! $this->isNotEmptyArray($attributes['colors'] ?? null)) {
                 $this->errors['productColor'] = "Invalid Color Please Choose the Correct Color for Clothies!";
             }
         }
 
         if (checkSize($attributes['category'])) {
-            if (! $this->arrayValidate($attributes['sizes'] ?? null)) {
+            if (! $this->isNotEmptyArray($attributes['sizes'] ?? null)) {
                 $this->errors['productSize'] = "Invalid Size Please Choose the Correct Size for Clothies!";
             }
         }
@@ -43,13 +45,13 @@ class ProductValidation extends Validation
         if ($this->method != "PUT") {
             if (! $this->isImage($image)) {
                 $this->errors['productImage'] = "Please Enter Image of Product!";
-            } elseif (! $this->moveProductImage($image, $attributes['product_name'])) {
+            } elseif (! (new ImageHandler)->moveProductImage($image, $attributes['product_name'])) {
                 $this->errors['productImage'] = "Invalid Extension Please Enter Correct Extension (PNG, JPG, JPEG)!";
             }
         }
 
         if ($this->method === "PUT" && $image['image']['name'] != "") {
-            if (! $this->moveProductImage($image, $attributes['product_name'])) {
+            if (! (new ImageHandler)->moveProductImage($image, $attributes['product_name'])) {
                 $this->errors['productImage'] = "Invalid Extension Please Enter Correct Extension (PNG, JPG, JPEG)!";
             }
         }

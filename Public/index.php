@@ -10,7 +10,6 @@ require __DIR__ . ("/../src/Core/Function.php");
 require base_path("Core/Router.php");
 
 use App\Core\Exception\RecordNotFoundException;
-use Exception;
 use Core\Router;
 
 $uri = parse_url($_SERVER['REQUEST_URI'])["path"];

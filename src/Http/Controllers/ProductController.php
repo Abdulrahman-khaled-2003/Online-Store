@@ -85,7 +85,7 @@ class ProductController extends Controller
             die();
         }
         $oldImage = $this->getProductImage($attributes['id']);
-        $extension = checkImage($_FILES, $oldImage);
+        $extension = checkImage($_FILES, $oldImage['productImage']);
         $this->editProduct($attributes, $extension);
         Session::flash("Success-Message", $attributes['product_name'] . " Updated Successfully!");
         redirect("/products");
@@ -106,7 +106,7 @@ class ProductController extends Controller
             $attributes['product_name'],
             $attributes['product_name'] . "." . $extension,
             $attributes['description'],
-            $attributes['price'],
+            abs($attributes['price']),
             $attributes['id']
         ]);
 
@@ -218,7 +218,7 @@ class ProductController extends Controller
             $attributes['product_name'],
             $attributes['product_name'] . "." . $extension,
             $attributes['description'],
-            $attributes['price'],
+            abs($attributes['price']),
             $attributes['id']
         ]);
 

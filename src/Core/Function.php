@@ -1,7 +1,6 @@
 <?php
 
 use App\Core\Database;
-use App\Core\Exception\FileNotFoundException;
 
 require "Database.php";
 
@@ -92,20 +91,12 @@ function checkSize($category)
 function checkImage($newImage, $oldImage)
 {
     if ($newImage['image']['name'] === "") {
-        $extension = pathinfo($oldImage['productImage'], PATHINFO_EXTENSION);
+        $extension = pathinfo($oldImage, PATHINFO_EXTENSION);
     } else {
 
         $extension = pathinfo($newImage['image']['name'], PATHINFO_EXTENSION);
     }
     return $extension;
-}
-
-function extensionValidate($imgExtension, $extension)
-{
-    if (! in_array($imgExtension, $extension)) {
-        return false;
-    }
-    return true;
 }
 
 function moveUploadedFile($fileName, $destination)

@@ -80,7 +80,7 @@ class CategoryController extends Controller
         }
 
         $oldImage = $this->getCategoryImage($attributes['id']);
-        $extension = checkImage($_FILES, $oldImage);
+        $extension = checkImage($_FILES, $oldImage['categoryImage']);
 
         db()->execute("UPDATE categories set categoryName = ? , categoryDescription = ? , categoryImage = ? where id = ?", [
             $attributes['category-name'],
