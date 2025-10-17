@@ -25,13 +25,13 @@ class CategoryValidation extends Validation
         if ($this->method != "PUT") {
             if (! $this->isImage($image)) {
                 $this->errors['categoryImage'] = "Please Enter Image of Category!";
-            } elseif (! (new ImageHandler)->moveCategoryImage($image, $attributes['category-name'])) {
+            } elseif (! (new ImageHandler)->isValidCategoryImage($image, $attributes['category-name'])) {
                 $this->errors['categoryImage'] = "Invalid Extension Please Enter Correct Extension (PNG, JPG, JPEG)!";
             }
         }
 
         if ($this->method === "PUT" && $image['image']['name'] != "") {
-            if (! (new ImageHandler)->moveCategoryImage($image, $attributes['category-name'])) {
+            if (! (new ImageHandler)->isValidCategoryImage($image, $attributes['category-name'])) {
                 $this->errors['categoryImage'] = "Invalid Extension Please Enter Correct Extension (PNG, JPG, JPEG)!";
             }
         }

@@ -20,7 +20,7 @@ class ImageHandler extends Validation
         return $this->extensionValidate($this->imgExtension, $extension);
     }
 
-    public function  moveProductImage($image, $productName)
+    public function  isValidProductImage($image, $productName)
     {
         if (! $this->imageHandle($image)) {
             return false;
@@ -32,7 +32,7 @@ class ImageHandler extends Validation
         return moveUploadedFile($this->imgTmp, $imgPath . $productName . "." . $this->imgExtension);
     }
 
-    public function moveCategoryImage($image, $categoryName)
+    public function isValidCategoryImage($image, $categoryName)
     {
         if (! $this->imageHandle($image)) {
             return false;
