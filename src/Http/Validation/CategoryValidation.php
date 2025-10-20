@@ -23,7 +23,7 @@ class CategoryValidation extends Validation
         }
 
         if ($this->method != "PUT") {
-            if (! $this->isImage($image)) {
+            if (! $this->isFoundImage($image)) {
                 $this->errors['categoryImage'] = "Please Enter Image of Category!";
             } elseif (! (new ImageHandler)->isValidCategoryImage($image, $attributes['category-name'])) {
                 $this->errors['categoryImage'] = "Invalid Extension Please Enter Correct Extension (PNG, JPG, JPEG)!";

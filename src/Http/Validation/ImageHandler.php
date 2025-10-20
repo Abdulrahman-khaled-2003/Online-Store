@@ -17,7 +17,7 @@ class ImageHandler extends Validation
         $this->imgTmp = $imgData['tmp_name'];
         $extension = ["png", "jpg", "jpeg"];
         $this->imgExtension = strtolower(pathinfo($imgName, PATHINFO_EXTENSION));
-        return $this->extensionValidate($this->imgExtension, $extension);
+        return $this->isCorrectImage($this->imgTmp);
     }
 
     public function  isValidProductImage($image, $productName)

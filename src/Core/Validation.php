@@ -6,8 +6,6 @@ use App\Core\Exception\FileNotFoundException;
 
 abstract class Validation
 {
-    private $imgTmp;
-    private $imgExtension;
     protected $method;
     public $errors = [];
 
@@ -28,16 +26,13 @@ abstract class Validation
         return (!is_array($array) || empty($array)) ? false : true;
     }
 
-    protected function isImage($image)
+    protected function isFoundImage($image)
     {
         return ($image['image']['name'] === "") ? false : true;
     }
 
-    protected function extensionValidate($imgExtension, $extension)
-    {
-        if (! in_array($imgExtension, $extension)) {
-            return false;
-        }
-        return true;
+    protected function isCorrectImage($image)
+    {   
+      return (getImageSize($image) === false) ? false : true;
     }
 }

@@ -43,7 +43,7 @@ class ProductValidation extends Validation
         }
 
         if ($this->method != "PUT") {
-            if (! $this->isImage($image)) {
+            if (! $this->isFoundImage($image)) {
                 $this->errors['productImage'] = "Please Enter Image of Product!";
             } elseif (! (new ImageHandler)->isValidProductImage($image, $attributes['product_name'])) {
                 $this->errors['productImage'] = "Invalid Extension Please Enter Correct Extension (PNG, JPG, JPEG)!";
