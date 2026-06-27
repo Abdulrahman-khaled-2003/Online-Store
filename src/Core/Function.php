@@ -7,7 +7,7 @@ require "Database.php";
 function dd($value)
 {
     echo "<pre>";
-    echo var_dump($value);
+     var_dump($value);
     echo "</pre>";
     die();
 }
