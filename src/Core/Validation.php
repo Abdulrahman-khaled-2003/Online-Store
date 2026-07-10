@@ -32,7 +32,14 @@ abstract class Validation
     }
 
     protected function isCorrectImage($image)
-    {   
-      return (getImageSize($image) === false) ? false : true;
+    {
+    return (getImageSize($image) === false) ? false : true;
     }
-}
+
+    protected function fileExists($imgPath)
+    {
+        if (! file_exists($imgPath)) {
+            throw new FileNotFoundException("File of Image Not Found!");
+        }
+    }
+ }

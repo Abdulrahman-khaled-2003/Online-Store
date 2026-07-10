@@ -3,10 +3,10 @@
 namespace App\Http\Validation;
 
 use App\Core\Validation;
-use App\Http\Validation\ImageHandler;
+use App\Http\Validation\ImageValidation;
 
 require base_path("Core/Validation.php");
-require "ImageHandler.php";
+require "ImageValidation.php";
 
 class ProductValidation extends Validation
 {
@@ -45,13 +45,13 @@ class ProductValidation extends Validation
         if ($this->method != "PUT") {
             if (! $this->isFoundImage($image)) {
                 $this->errors['productImage'] = "Please Enter Image of Product!";
-            } elseif (! (new ImageHandler)->isValidProductImage($image, $attributes['product_name'])) {
+            } elseif (! (new ImageValidation)->isValidProductImage($image, $attributes['product_name'])) {
                 $this->errors['productImage'] = "Invalid Extension Please Enter Correct Extension (PNG, JPG, JPEG)!";
             }
         }
 
         if ($this->method === "PUT" && $image['image']['name'] != "") {
-            if (! (new ImageHandler)->isValidProductImage($image, $attributes['product_name'])) {
+            if (! (new ImageValidation)->isValidProductImage($image, $attributes['product_name'])) {
                 $this->errors['productImage'] = "Invalid Extension Please Enter Correct Extension (PNG, JPG, JPEG)!";
             }
         }
