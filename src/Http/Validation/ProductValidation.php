@@ -43,16 +43,24 @@ class ProductValidation extends Validation
         }
 
         if ($this->method != "PUT") {
-            if (! $this->isFoundImage($image)) {
+            if (! (new ImageValidation)->isFoundImage($image)) {
                 $this->errors['productImage'] = "Please Enter Image of Product!";
-            } elseif (! (new ImageValidation)->isSizeImage($image['image']['size'])) {
-                $this->errors['productImage'] = "Invalid Size, Size must be not above 5MB!";
+            } elseif (! (new ImageValidation)->isCorrectTypeOfImage($image['image']['tmp_name'])) {
+                $this->errors['productImage'] = "Invalid Extension Please Enter Correct Extension (PNG, JPG, JPEG)!";
+            } elseif (! (new ImageValidation)->isCorrectSizeOfImage($image['image']['size'])) {
+                $this->errors['productImage'] = "Invalid Size, Size Must Be Under 5MB.";
+            }else{
+                (new ImageValidation)->isValidProductImage($image , $attributes['product_name']);
             }
         }
 
         if ($this->method === "PUT" && $image['image']['name'] != "") {
-            if (! (new ImageValidation)->isValidProductImage($image, $attributes['product_name'])) {
+            if (! (new ImageValidation)->isCorrectTypeOfImage($image['image']['tmp_name'])) {
                 $this->errors['productImage'] = "Invalid Extension Please Enter Correct Extension (PNG, JPG, JPEG)!";
+            } elseif (! (new ImageValidation)->isCorrectSizeOfImage($image['image']['size'])) {
+                $this->errors['productImage'] = "Invalid Size, Size Must Be Under 5MB.";
+            }else{
+                (new ImageValidation)->isValidProductImage($image , $attributes['product_name']);
             }
         }
     }

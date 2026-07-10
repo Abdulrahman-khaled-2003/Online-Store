@@ -103,3 +103,12 @@ function moveUploadedFile($fileName, $destination)
 {
     return move_uploaded_file($fileName, $destination);
 }
+
+function checkTypeOfImage($imgTmp)
+{
+    $imgType = mime_content_type($imgTmp);
+    [, $extension] = explode("/", $imgType);
+    return (strtolower($extension) === "png" ||
+            strtolower($extension) === "jpg" ||
+            strtolower($extension) === "jpeg")  ? true : false;
+}
