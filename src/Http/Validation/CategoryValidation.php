@@ -24,16 +24,24 @@ class CategoryValidation extends Validation
         }
 
         if ($this->method != "PUT") {
-            if (! (new ImageValidation)->isFoundImage($image)) {
+            if (! imageValidation()->isFoundImage($image)) {
                 $this->errors['categoryImage'] = "Please Enter Image of Category!";
-            } elseif (! (new ImageValidation)->isValidCategoryImage($image, $attributes['category-name'])) {
+            } elseif (! imageValidation()->isCorrectTypeOfImage($image['image']['tmp_name'])) {
                 $this->errors['categoryImage'] = "Invalid Extension Please Enter Correct Extension (PNG, JPG, JPEG)!";
+            } elseif (! imageValidation()->isCorrectSizeOfImage($image['image']['size'])) {
+                $this->errors['productImage'] = "Invalid Size, Size Must Be Under 5MB.";
+            } else {
+                imageValidation()->isValidCategoryImage($image, $attributes['category-name']);
             }
         }
 
         if ($this->method === "PUT" && $image['image']['name'] != "") {
-            if (! (new ImageValidation)->isValidCategoryImage($image, $attributes['category-name'])) {
+            if (! imageValidation()->isCorrectTypeOfImage($image['image']['tmp_name'])) {
                 $this->errors['categoryImage'] = "Invalid Extension Please Enter Correct Extension (PNG, JPG, JPEG)!";
+            } elseif (! imageValidation()->isCorrectSizeOfImage($image['image']['size'])) {
+                $this->errors['productImage'] = "Invalid Size, Size Must Be Under 5MB.";
+            } else {
+                imageValidation()->isValidCategoryImage($image, $attributes['category-name']);
             }
         }
     }

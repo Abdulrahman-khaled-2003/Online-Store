@@ -1,6 +1,7 @@
 <?php
 
 use App\Core\Database;
+use App\Http\Validation\ImageValidation;
 
 require "Database.php";
 
@@ -109,6 +110,15 @@ function checkTypeOfImage($imgTmp)
     $imgType = mime_content_type($imgTmp);
     [, $extension] = explode("/", $imgType);
     return (strtolower($extension) === "png" ||
-            strtolower($extension) === "jpg" ||
-            strtolower($extension) === "jpeg")  ? true : false;
+        strtolower($extension) === "jpg" ||
+        strtolower($extension) === "jpeg")  ? true : false;
+}
+
+function imageValidation()
+{
+    static $image = null;
+    if ($image === null) {
+        $image = new ImageValidation();
+    }
+    return $image;
 }
