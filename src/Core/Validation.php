@@ -31,9 +31,15 @@ abstract class Validation
         return ($image['image']['name'] === "") ? false : true;
     }
 
-    protected function isCorrectImage($image)
+    protected function isCorrectImage($imgTmp)
     {
-    return (getImageSize($image) === false) ? false : true;
+
+        return (getImageSize($imgTmp) === false) ? false : true;
+    }
+
+    protected function isSizeImage($imgSize, $maxSize = 5242880)
+    {
+        return ($imgSize >  $maxSize) ? false : true;
     }
 
     protected function fileExists($imgPath)
@@ -42,4 +48,4 @@ abstract class Validation
             throw new FileNotFoundException("File of Image Not Found!");
         }
     }
- }
+}

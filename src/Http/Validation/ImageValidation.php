@@ -7,11 +7,13 @@ use App\Core\Validation;
 class ImageValidation extends Validation
 {
     private $imgTmp;
+    private $imgSize;
     private $imgExtension;
 
     private function parseImage($image)
     {
         $imgData = $image['image'];
+        $this->imgSize = $imgData['size'];
         $imgName = $imgData['name'];
         $this->imgTmp = $imgData['tmp_name'];
         $this->imgExtension = strtolower(pathinfo($imgName, PATHINFO_EXTENSION));
@@ -20,8 +22,8 @@ class ImageValidation extends Validation
     private function imageHandler($image, $name, $imgPath)
     {
         $this->parseImage($image);
-        
-        if (! $this->isCorrectImage($this->imgTmp)) {
+
+        if (! $this->isCorrectImage($this->imgTmp) || ! $this->isSizeImage($this->imgSize)) {
             return false;
         }
         $imgPath = base_path("../public/assets/images/{$imgPath}/");
