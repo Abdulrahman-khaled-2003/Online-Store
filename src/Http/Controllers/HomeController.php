@@ -7,30 +7,26 @@ require "Controller.php";
 
 class HomeController extends Controller
 {
-
     public function index()
     {
         $this->render("home", [
-            "categories" => $this->getCategoriesWithProducts()
+            "categories" => $this->getCategories(),
+            "products" => $this->getProducts()
         ]);
     }
 
-
-    private function getCategoriesWithProducts()
+    private function getCategories()
     {
-        $categories = db()->fetchAll("SELECT categoryName , id FROM categories");
+        return db()->fetchAll("SELECT * FROM categories");
+    }
 
-        foreach ($categories as &$category) {
-            $categoryId = $category['id'];
-
-            $products = db()->fetchAll(
-                "SELECT * FROM products WHERE category_id = ?",
-                [$categoryId]
-            );
-            
-            $category['products'] = $products;
+    private function getProducts()
+    {
+        $products = db()->fetchAll("SELECT * FROM products");
+        $productsByCategorId = [];
+        foreach ($products as $product) {
+            $productsByCategorId[$product['category_id']][] = $product;
         }
-        unset($category);
-        return $categories;
+        return $productsByCategorId;
     }
 }
