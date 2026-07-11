@@ -104,7 +104,6 @@ function moveUploadedFile($fileName, $destination)
 {
     return move_uploaded_file($fileName, $destination);
 }
-<<<<<<< HEAD
 
 function checkTypeOfImage($imgTmp)
 {
@@ -123,5 +122,3 @@ function imageValidation()
     }
     return $image;
 }
-=======
->>>>>>> parent of b8481df (extract image validation into isCorrectSizeOfImage() and isCorrectTypeOfImage())

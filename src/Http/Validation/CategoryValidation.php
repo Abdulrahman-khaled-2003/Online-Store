@@ -24,11 +24,7 @@ class CategoryValidation extends Validation
         }
 
         if ($this->method != "PUT") {
-<<<<<<< HEAD
-            if (! imageValidation()->isFoundImage($image)) {
-=======
             if (! $this->isFoundImage($image)) {
->>>>>>> parent of b8481df (extract image validation into isCorrectSizeOfImage() and isCorrectTypeOfImage())
                 $this->errors['categoryImage'] = "Please Enter Image of Category!";
             } elseif (! imageValidation()->isCorrectTypeOfImage($image['image']['tmp_name'])) {
                 $this->errors['categoryImage'] = "Invalid Extension Please Enter Correct Extension (PNG, JPG, JPEG)!";

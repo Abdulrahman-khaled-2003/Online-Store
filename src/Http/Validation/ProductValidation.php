@@ -43,7 +43,6 @@ class ProductValidation extends Validation
         }
 
         if ($this->method != "PUT") {
-<<<<<<< HEAD
             if (! imageValidation()->isFoundImage($image)) {
                 $this->errors['productImage'] = "Please Enter Image of Product!";
             } elseif (! imageValidation()->isCorrectTypeOfImage($image['image']['tmp_name'])) {
@@ -52,27 +51,16 @@ class ProductValidation extends Validation
                 $this->errors['productImage'] = "Invalid Size, Size Must Be Under 5MB.";
             } else {
                 imageValidation()->isValidProductImage($image, $attributes['product_name']);
-=======
-            if (! $this->isFoundImage($image)) {
-                $this->errors['productImage'] = "Please Enter Image of Product!";
-            } elseif (! (new ImageValidation)->isSizeImage($image['image']['size'])) {
-                $this->errors['productImage'] = "Invalid Size, Size must be not above 5MB!";
->>>>>>> parent of b8481df (extract image validation into isCorrectSizeOfImage() and isCorrectTypeOfImage())
             }
         }
 
         if ($this->method === "PUT" && $image['image']['name'] != "") {
-<<<<<<< HEAD
             if (! imageValidation()->isCorrectTypeOfImage($image['image']['tmp_name'])) {
                 $this->errors['productImage'] = "Invalid Extension Please Enter Correct Extension (PNG, JPG, JPEG)!";
             } elseif (! imageValidation()->isCorrectSizeOfImage($image['image']['size'])) {
                 $this->errors['productImage'] = "Invalid Size, Size Must Be Under 5MB.";
             } else {
                 imageValidation()->isValidProductImage($image, $attributes['product_name']);
-=======
-            if (! (new ImageValidation)->isValidProductImage($image, $attributes['product_name'])) {
-                $this->errors['productImage'] = "Invalid Extension Please Enter Correct Extension (PNG, JPG, JPEG)!";
->>>>>>> parent of b8481df (extract image validation into isCorrectSizeOfImage() and isCorrectTypeOfImage())
             }
         }
     }
