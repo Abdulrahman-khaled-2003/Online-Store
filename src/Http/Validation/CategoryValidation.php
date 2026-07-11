@@ -24,12 +24,16 @@ class CategoryValidation extends Validation
         }
 
         if ($this->method != "PUT") {
+<<<<<<< HEAD
             if (! imageValidation()->isFoundImage($image)) {
+=======
+            if (! $this->isFoundImage($image)) {
+>>>>>>> parent of b8481df (extract image validation into isCorrectSizeOfImage() and isCorrectTypeOfImage())
                 $this->errors['categoryImage'] = "Please Enter Image of Category!";
             } elseif (! imageValidation()->isCorrectTypeOfImage($image['image']['tmp_name'])) {
                 $this->errors['categoryImage'] = "Invalid Extension Please Enter Correct Extension (PNG, JPG, JPEG)!";
             } elseif (! imageValidation()->isCorrectSizeOfImage($image['image']['size'])) {
-                $this->errors['productImage'] = "Invalid Size, Size Must Be Under 5MB.";
+                $this->errors['categoryImage'] = "Invalid Size, Size Must Be Under 5MB.";
             } else {
                 imageValidation()->isValidCategoryImage($image, $attributes['category-name']);
             }
@@ -39,7 +43,7 @@ class CategoryValidation extends Validation
             if (! imageValidation()->isCorrectTypeOfImage($image['image']['tmp_name'])) {
                 $this->errors['categoryImage'] = "Invalid Extension Please Enter Correct Extension (PNG, JPG, JPEG)!";
             } elseif (! imageValidation()->isCorrectSizeOfImage($image['image']['size'])) {
-                $this->errors['productImage'] = "Invalid Size, Size Must Be Under 5MB.";
+                $this->errors['categoryImage'] = "Invalid Size, Size Must Be Under 5MB.";
             } else {
                 imageValidation()->isValidCategoryImage($image, $attributes['category-name']);
             }

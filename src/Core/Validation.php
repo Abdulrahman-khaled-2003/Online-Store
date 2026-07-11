@@ -26,6 +26,22 @@ abstract class Validation
         return (!is_array($array) || empty($array)) ? false : true;
     }
 
+    protected function isFoundImage($image)
+    {
+        return ($image['image']['name'] === "") ? false : true;
+    }
+
+    protected function isCorrectImage($imgTmp)
+    {
+
+        return (getImageSize($imgTmp) === false) ? false : true;
+    }
+
+    protected function isSizeImage($imgSize, $maxSize = 5242880)
+    {
+        return ($imgSize >  $maxSize) ? false : true;
+    }
+
     protected function fileExists($imgPath)
     {
         if (! file_exists($imgPath)) {
