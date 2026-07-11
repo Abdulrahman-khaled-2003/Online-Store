@@ -1,4 +1,7 @@
 <?php
+
+use App\Core\Exceptions\FileNotFoundException;
+
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -6,16 +9,22 @@ error_reporting(E_ALL);
 session_start();
 
 require __DIR__ . ("/../src/Core/Function.php");
+require __DIR__ . ("/../src/Core/Exceptions/FileNotFoundException.php");
 
 spl_autoload_register(function ($class) {
     $class = str_replace("\\", "/", $class);
     $class = str_replace("App/", "", $class);
-    require base_path("{$class}.php");
+    $file = base_path("{$class}.php");
+    try {
+        autoloaderFileNotFound($file);
+    } catch (RuntimeException $e) {
+        serverError($e->getMessage(), $e->getFile(), $e->getLine());
+    }
+    require $file;
 });
 
 use App\Core\Exceptions\RecordNotFoundException;
 use App\Core\Router;
-use Exception;
 
 $uri = parse_url($_SERVER['REQUEST_URI'])["path"];
 $method = $_POST["_method"] ?? $_SERVER["REQUEST_METHOD"];

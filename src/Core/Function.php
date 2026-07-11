@@ -1,6 +1,7 @@
 <?php
 
 use App\Core\Database;
+use App\Core\Exceptions\FileNotFoundException;
 
 function dd($value)
 {
@@ -108,4 +109,9 @@ function extensionValidate($imgExtension, $extension)
 function moveUploadedFile($fileName, $destination)
 {
     return move_uploaded_file($fileName, $destination);
+}
+
+function autoloaderFileNotFound($file){
+    return (! file_exists($file)) ? throw new FileNotFoundException("Autoloader error: Class file not found: {$file}")
+    :  true;
 }
