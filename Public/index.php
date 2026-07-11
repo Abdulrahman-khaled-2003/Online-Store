@@ -12,15 +12,7 @@ require __DIR__ . ("/../src/Core/Function.php");
 require __DIR__ . ("/../src/Core/Exceptions/FileNotFoundException.php");
 
 spl_autoload_register(function ($class) {
-    $class = str_replace("\\", "/", $class);
-    $class = str_replace("App/", "", $class);
-    $file = base_path("{$class}.php");
-    try {
-        autoloaderFileNotFound($file);
-    } catch (RuntimeException $e) {
-        serverError($e->getMessage(), $e->getFile(), $e->getLine());
-    }
-    require $file;
+        return splAutoLoaderHandle($class);
 });
 
 use App\Core\Exceptions\RecordNotFoundException;

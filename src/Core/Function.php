@@ -111,7 +111,30 @@ function moveUploadedFile($fileName, $destination)
     return move_uploaded_file($fileName, $destination);
 }
 
-function autoloaderFileNotFound($file){
+function autoloaderFileNotFound($file)
+{
     return (! file_exists($file)) ? throw new FileNotFoundException("Autoloader error: Class file not found: {$file}")
-    :  true;
+        :  true;
+}
+
+function stringReplace($class)
+{
+    $class = str_replace("\\", "/", $class);
+    $class = str_replace("App/", "", $class);
+    return $class;
+}
+
+function splAutoLoaderHandle($class)
+{
+    if (strpos($class, "App\\") !== 0) {
+        return;
+    }
+    $class = stringReplace($class);
+    $file = base_path("{$class}.php");
+    try {
+        autoloaderFileNotFound($file);
+    } catch (RuntimeException $e) {
+        serverError($e->getMessage(), $e->getFile(), $e->getLine());
+    }
+    require $file;
 }
