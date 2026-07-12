@@ -6,7 +6,7 @@ use App\Core\Exceptions\FileNotFoundException;
 function dd($value)
 {
     echo "<pre>";
-    echo var_dump($value);
+    var_dump($value);
     echo "</pre>";
     die();
 }
@@ -90,7 +90,7 @@ function checkSize($category)
 function checkImage($newImage, $oldImage)
 {
     if ($newImage['image']['name'] === "") {
-        $extension = pathinfo($oldImage['productImage'], PATHINFO_EXTENSION);
+        $extension = pathinfo($oldImage, PATHINFO_EXTENSION);
     } else {
 
         $extension = pathinfo($newImage['image']['name'], PATHINFO_EXTENSION);
@@ -98,17 +98,18 @@ function checkImage($newImage, $oldImage)
     return $extension;
 }
 
-function extensionValidate($imgExtension, $extension)
-{
-    if (! in_array($imgExtension, $extension)) {
-        return false;
-    }
-    return true;
-}
-
 function moveUploadedFile($fileName, $destination)
 {
     return move_uploaded_file($fileName, $destination);
+}
+
+function checkTypeOfImage($imgTmp)
+{
+    $imgType = mime_content_type($imgTmp);
+    [, $extension] = explode("/", $imgType);
+    return (strtolower($extension) === "png" ||
+        strtolower($extension) === "jpg" ||
+        strtolower($extension) === "jpeg")  ? true : false;
 }
 
 function autoloaderFileNotFound($file)
@@ -137,4 +138,12 @@ function splAutoLoaderHandle($class)
         serverError($e->getMessage(), $e->getFile(), $e->getLine());
     }
     require $file;
+}
+function imageValidation()
+{
+    static $image = null;
+    if ($image === null) {
+        $image = new ImageValidation();
+    }
+    return $image;
 }
