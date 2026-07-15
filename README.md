@@ -230,29 +230,29 @@ A pivot table that represents the many-to-many relationship between products and
 
 ## Project Structure
 
+```text
 Online-Store/
-
 │
-├── Public/                         # Publicly accessible files
-│   ├── assets/                     # CSS, JavaScript, Images, Fonts
-│   └── index.php                   # Application entry point (Front Controller)
+├── Public/
+│   ├── assets/              # CSS, JavaScript, Images, Fonts
+│   └── index.php            # Application entry point (Front Controller)
 │
 ├── src/
-│   ├── Core/                       # Core framework classes
-│   │
+│   ├── Core/                # Core framework classes
 │   ├── Http/
-│   │   ├── Controllers/            # Handle incoming HTTP requests
-│   │   └── Validation/             # Validation classes and rules
+│   │   └── Controllers/     # Handle incoming HTTP requests
 │   │
-│   ├── Views/
-│   │   ├── Partials/               # Reusable view components
-│   │   └── Templates/              # Page templates
+│   ├── Validation/          # Validation classes and rules
 │   │
-│   └── config/
-│       ├── database.php            # Database configuration
-│       └── routes.php              # Route definitions
+│   └── Views/
+│       ├── Partials/        # Reusable view components
+│       └── Templates/       # Page templates
 │
-└── README.md                       # Project documentation
+├── config/
+│   ├── database.php         # Database configuration
+│   └── routes.php           # Route definitions
+│
+└── README.md                # Project documentation
 ```
 
 
