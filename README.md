@@ -26,7 +26,7 @@ The application demonstrates core backend concepts such as routing, controllers,
 * PHP 8+
 * MySQL
 * HTML5
-* CSS3
+* Tailwind CSS
 * MVC Architecture
 * PDO
 * Composer Autoloading (PSR-4)
