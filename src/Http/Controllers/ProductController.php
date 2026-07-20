@@ -1,0 +1,245 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Core\Exception\RecordNotFoundException;
+use App\Core\Session;
+use App\Http\Validation\ProductValidation;
+
+require base_path("./Core/Exceptions/RecordNotFoundException.php");
+require base_path("./Core/Session.php");
+require base_path("Http/Validation/ProductValidation.php");
+require "Controller.php";
+
+class ProductController extends Controller
+{
+    protected $validated;
+
+    public function index(): void
+    {
+        $this->render("Products/index", [
+            "products" => $this->getProducts(),
+            "categories" => $this->getCategories()
+        ]);
+    }
+
+    public function show(int $id): void
+    {
+        $this->render("Products/show", [
+            "categories" => $this->getCategories(),
+            "product" => $this->getProduct($id),
+            "productColor" => $this->getProductColors($id),
+            "productSize" => $this->getProductSizes($id)
+        ]);
+    }
+
+    public function create(int $id): void
+    {
+        $this->render("Products/create", [
+            "errors" => $this->validated->errors ?? null,
+            "category" => $this->getCategoryNameAndId($id),
+            "categories" => $this->getCategories(),
+            "colors" => $this->getColors(),
+            "sizes" => $this->getSizes()
+        ]);
+    }
+
+    public function store(array $attributes): void
+    {
+        $this->validated = new ProductValidation($attributes, $_FILES);
+        if (! empty($this->validated->errors)) {
+            $this->create($attributes['id']);
+            die();
+        }
+        $extenstion = pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION);
+        $this->createProduct($attributes, $extenstion);
+        Session::flash("Success-Message", $attributes['product_name'] . " Added Successfuly!");
+        redirect("/products");
+    }
+
+    public function indexCards(): void
+    {
+        $this->render("Products/indexCards", [
+            "categories" => $this->getCategories()
+        ]);
+    }
+
+    public function edit(int $id)
+    {
+        $this->render("Products/edit", [
+            "errors" => $this->validated->errors ?? null,
+            "categories" => $this->getCategories(),
+            "product" => $this->getProduct($id),
+            "colors" => $this->getColors(),
+            "sizes" => $this->getSizes(),
+            "productColor" => $this->getProductColors($id),
+            "productSize" => $this->getProductSizes($id)
+        ]);
+    }
+
+    public function update(array $attributes)
+    {
+        $this->validated = new ProductValidation($attributes, $_FILES);
+        if (! empty($this->validated->errors)) {
+            $this->edit($attributes['id']);
+            die();
+        }
+        $oldImage = $this->getProductImage($attributes['id']);
+        $extension = checkImage($_FILES, $oldImage['productImage']);
+        $this->editProduct($attributes, $extension);
+        Session::flash("Success-Message", $attributes['product_name'] . " Updated Successfully!");
+        redirect("/products");
+    }
+
+    public function destroy(array $attributes)
+    {
+        $this->deleteProduct($attributes['id']);
+        Session::flash("Success-Message", "Product Deleted Successfully");
+        redirect("/products");
+    }
+
+    // Database helper function Query
+    private function editProduct(array $attributes, ?string $extension)
+    {
+        db()->execute("UPDATE products set productName = ? , productImage = ? , productDescription = ? , productPrice = ? 
+        where id = ?", [
+            $attributes['product_name'],
+            $attributes['product_name'] . "." . $extension,
+            $attributes['description'],
+            abs($attributes['price']),
+            $attributes['id']
+        ]);
+
+        $colors = $attributes['colors'] ?? [];
+        $sizes = $attributes['sizes'] ?? [];
+
+        db()->execute("DELETE FROM product_color WHERE product_id = ?", [$attributes['id']]);
+
+        foreach ($colors as $color) {
+            $colorID = $this->getColorID($color);
+            db()->execute("INSERT INTO product_color (`color_id` , `product_id`) VALUES (? , ?)", [
+                $colorID['id'],
+                $attributes['id']
+            ]);
+        }
+
+        db()->execute("DELETE FROM product_size where product_id = ?", [$attributes['id']]);
+
+        foreach ($sizes as $size) {
+            $sizeID = $this->getSizeID($size);
+            db()->execute("INSERT INTO product_size (`size_id` , `product_id`) VALUES (? , ?)", [
+                $sizeID['id'],
+                $attributes['id']
+            ]);
+        }
+    }
+
+    private function deleteProduct(int $id)
+    {
+        db()->execute("DELETE FROM products where id = ?", [$id]);
+    }
+
+    private function getCategories(): array
+    {
+        return db()->fetchAll("SELECT * FROM categories");
+    }
+
+    private function getCategoryNameAndId(int $id): array
+    {
+        $categoryNameAndId = db()->fetch("SELECT categoryName , id FROM categories where id = ? LIMIT 1", [$id]);
+        if ($categoryNameAndId === false) {
+            throw new RecordNotFoundException("Category with ID {$id} not found!");
+        }
+        return $categoryNameAndId;
+    }
+
+    private function getProductImage(int $id): array
+    {
+        return db()->fetch("SELECT productImage from products where id = ? ", [$id]);
+    }
+
+    private function getColorID(string $colorName): array
+    {
+        return db()->fetch("SELECT id from colors where colorName = ? LIMIT 1", ["$colorName"]);
+    }
+
+    private function getSizeID(string $sizeName): array
+    {
+        return db()->fetch("SELECT id FROM sizes where sizeName = ? LIMIT 1", ["$sizeName"]);
+    }
+
+    private function getColors(): array
+    {
+        return db()->fetchAll("SELECT * FROM colors");
+    }
+
+    private function getSizes(): array
+    {
+        return db()->fetchAll("SELECT * FROM sizes");
+    }
+
+    private function getProductColors(int $id): array
+    {
+        return db()->fetchAll(
+            "SELECT c.colorName FROM product_color pc JOIN colors c ON pc.color_id = c.id WHERE pc.product_id = ?",
+            [$id]
+        );
+    }
+    private function getProductSizes(int $id): array
+    {
+        return db()->fetchAll(
+            "SELECT s.sizeName FROM product_size pc JOIN sizes s ON pc.size_id = s.id WHERE pc.product_id = ?",
+            [$id]
+        );
+    }
+
+    private function getProducts(): array
+    {
+        return db()->fetchAll("SELECT p.id, p.productName, p.productDescription, p.productPrice, p.productImage, c.categoryName 
+        AS categoryName
+        FROM products p
+        JOIN categories c ON p.category_id = c.id ");
+    }
+
+    private function getProduct(int $id): array
+    {
+        $product = db()->fetch("SELECT p.id, p.productName, p.productDescription, p.productPrice, p.productImage, c.categoryName FROM products p
+        JOIN categories c ON p.category_id = c.id  WHERE p.id = ?", [$id]);
+        if ($product === false) {
+            throw new RecordNotFoundException("Product with ID {$id} not found!");
+        }
+        return $product;
+    }
+
+    private function createProduct(array $attributes, string $extension)
+    {
+        db()->execute("INSERT INTO products(`productName`, `productImage`, `productDescription`, `productPrice`, `category_id`) 
+        VALUES (?, ?, ?, ?, ? )", [
+            $attributes['product_name'],
+            $attributes['product_name'] . "." . $extension,
+            $attributes['description'],
+            abs($attributes['price']),
+            $attributes['id']
+        ]);
+
+        $lastID = db()->getLastId();
+
+        $colors = $attributes['colors'] ?? [];
+        $sizes = $attributes['sizes'] ?? [];
+
+        foreach ($colors as $color) {
+            $colorID = $this->getColorID($color);
+            db()->execute("INSERT INTO product_color (`product_id`, `color_id`) VALUES (?, ?)", [
+                $lastID,
+                $colorID['id']
+            ]);
+        }
+        foreach ($sizes as $size) {
+            $sizeID = $this->getSizeID($size);
+            db()->execute("INSERT INTO product_size (`product_id`, `size_id`) VALUES (?, ?)", [
+                $lastID,
+                $sizeID['id']
+            ]);
+        }
+    }
+}

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<?php
+
+use App\Core\Session;
+
+require base_path("Views/Partials/head.phtml");
+?>
+
+<body>
+    <?php require base_path("Views/Partials/nav.phtml") ?>
+
+    <!-- Flash Message -->
+    <?php if (Session::has("Success-Message")): ?>
+        <div class="mt-16">
+            <h2 class="text-green-500 text-3xl md:text-5xl font-bold text-center">
+                <?= Session::get("Success-Message") ?>
+            </h2>
+        </div>
+    <?php endif; ?>
+
+    <!-- Container -->
+    <div class="flex justify-center bg-gray-50 py-10">
+        <div class="w-full max-w-7xl bg-white shadow-xl rounded-2xl p-6">
+
+            <!-- Add Product Button -->
+            <div class="flex justify-center mb-6">
+                <a href="/products/cards"
+                    class="px-6 py-2 bg-indigo-500 text-white font-medium rounded-lg shadow hover:bg-indigo-600 transition">
+                    + Add Product
+                </a>
+            </div>
+
+            <!-- Table -->
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm text-gray-700 border-collapse">
+                    <thead class="bg-gradient-to-r from-indigo-400 to-indigo-600 text-white">
+                        <tr>
+                            <th class="px-6 py-3 text-xs font-semibold uppercase tracking-wider">Image</th>
+                            <th class="px-6 py-3 text-xs font-semibold uppercase tracking-wider">Product Name</th>
+                            <th class="px-6 py-3 text-xs font-semibold uppercase tracking-wider">Description</th>
+                            <th class="px-6 py-3 text-xs font-semibold uppercase tracking-wider">Category</th>
+                            <th class="px-6 py-3 text-xs font-semibold uppercase tracking-wider">Price</th>
+                            <th class="px-6 py-3 text-xs font-semibold uppercase tracking-wider text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        <?php foreach ($products as $product) : ?>
+                            <tr class="hover:bg-gray-50 transition">
+                                <!-- Image -->
+                                <td class="px-6 py-4">
+                                    <img src="/assets/images/Products/<?= htmlspecialchars($product['productImage']) ?>"
+                                        alt="photo"
+                                        class="h-16 w-16 rounded-lg object-cover shadow-sm">
+                                </td>
+
+                                <!-- Product Name -->
+                                <td class="px-6 py-4 font-medium text-gray-800">
+                                    <?= htmlspecialchars($product['productName']) ?>
+                                </td>
+
+                                <!-- Description -->
+                                <td class="px-6 py-4 max-w-xs truncate text-gray-600">
+                                    <?= htmlspecialchars($product['productDescription']) ?>
+                                </td>
+
+                                <!-- Category -->
+                                <td class="px-6 py-4">
+                                    <span class="px-3 py-1 rounded-full text-xs font-semibold bg-indigo-100 text-indigo-700">
+                                        <?= htmlspecialchars($product['categoryName']) ?>
+                                    </span>
+                                </td>
+
+                                <!-- Price -->
+                                <td class="px-6 py-4 font-semibold text-gray-900">
+                                    $<?= htmlspecialchars($product['productPrice']) ?>
+                                </td>
+
+                                <!-- Action Buttons -->
+                                <td class="px-6 py-4 text-center space-x-2">
+                                    <a href="/products/show/<?= htmlspecialchars($product['id']) ?>"
+                                        class="px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded-lg shadow hover:bg-blue-600 transition">
+                                        Show
+                                    </a>
+                                    <a href="/products/edit/<?= htmlspecialchars($product['id']) ?>"
+                                        class="px-4 py-2 text-sm font-medium text-white bg-yellow-500 rounded-lg shadow hover:bg-yellow-600 transition">
+                                        Edit
+                                    </a>
+                                    <form method="POST" action="/products/destroy">
+                                        <input type="hidden" name="_method" value="DELETE">
+                                        <input type="hidden" name="id" value="<?= $product['id'] ?>">
+                                        <button class="px-4 py-2 text-sm font-medium text-white bg-red-500 rounded-lg shadow hover:bg-red-600 transition">
+                                            Delete
+                                        </button>
+                                    </form>
+
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</body>
+
+
+</html>

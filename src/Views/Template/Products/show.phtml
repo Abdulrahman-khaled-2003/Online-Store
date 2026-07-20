@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<?php
+require base_path("Views/Partials/head.phtml");
+?>
+
+<body class="bg-gray-50">
+    <?php require base_path("Views/Partials/nav.phtml") ?>
+
+    <div class="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-10 bg-white rounded-lg shadow-lg p-6">
+
+            <!-- Left: Product Image -->
+            <div class="flex justify-center">
+                <img src="/assets/images/Products/<?= htmlspecialchars($product['productImage']) ?>" alt="Product Image" class="rounded-lg shadow-md">
+            </div>
+
+            <!-- Right: Product Details -->
+            <div class="flex flex-col">
+
+                <!-- Category Name -->
+                <p class="text-sm font-medium text-indigo-600 mb-1">
+                    <?= htmlspecialchars($product['categoryName']) ?>
+                </p>
+
+                <!-- Product Name + Price -->
+                <div class="flex items-center justify-between mb-3">
+                    <h1 class="text-2xl font-bold text-gray-900">
+                        <?= htmlspecialchars($product['productName']) ?>
+                    </h1>
+                    <p class="text-xl font-semibold text-gray-800">$<?= $product['productPrice'] ?></p>
+                </div>
+
+                <!-- Rating -->
+                <div class="flex items-center mb-4">
+                    <div class="flex text-yellow-400">
+                        ★★★★☆
+                    </div>
+                    <span class="ml-2 text-gray-600 text-sm">(512 reviews)</span>
+                </div>
+
+                <!-- Colors -->
+                <?php if (checkColor($product['categoryName'])) : ?>
+                    <div class="mb-8">
+                        <p class="font-medium text-gray-700 mb-2">Color</p>
+                        <div class="flex gap-2 mt-2 flex-wrap">
+                            <?php foreach ($productColor as $color) : ?>
+                                <?php if (strtolower($color['colorName']) === "black" || strtolower($color['colorName']) === "white") : ?>
+                                    <?php $bg = strtolower($color['colorName']);
+                                    $bgNum = $bg; ?>
+                                <?php else: ?>
+                                    <?php $bgNum = strtolower($color['colorName']) . "-500";
+                                    $bg = strtolower($color['colorName']); ?>
+                                <?php endif; ?>
+                                <input type="radio" name="color" value="<?= $bg ?>" id="color-<?= $bg ?>" class="hidden peer/<?= $bg ?>">
+                                <label for="color-<?= $bg ?>"
+                                    title="<?= ucfirst($color['colorName']) ?>"
+                                    class="w-8 h-8 rounded-full bg-<?= htmlspecialchars($bgNum) ?> border-2 border-gray-300 cursor-pointer 
+                       peer-checked/<?= $bg ?>:ring-2 peer-checked/<?= $bg ?>:ring-indigo-500">
+                                </label>
+                            <?php endforeach; ?>
+                        </div>
+                        <p class="text-red-500 text-md"><?= $errors['productColor'] ?? "" ?></p>
+                    </div>
+                <?php endif; ?>
+                <!-- Sizes -->
+                <?php if (checkSize($product['categoryName'])) : ?>
+                    <div class="mb-6">
+                        <p class="font-medium text-gray-700 mb-2">Size</p>
+                        <div class="flex gap-2 flex-wrap">
+                            <?php foreach ($productSize as $size) : ?>
+                                <?php $sizeValue = strtolower($size['sizeName']); ?>
+                                <input type="radio" name="size" value="<?= $sizeValue ?>" id="size-<?= $sizeValue ?>" class="hidden peer/<?= $sizeValue ?>">
+                                <label for="size-<?= $sizeValue ?>"
+                                    class="px-3 py-1 border rounded-md cursor-pointer 
+                       peer-checked/<?= $sizeValue ?>:bg-indigo-500 peer-checked/<?= $sizeValue ?>:text-white peer-checked/<?= $sizeValue ?>:border-indigo-500">
+                                    <?= htmlspecialchars($size['sizeName']) ?>
+                                </label>
+                            <?php endforeach; ?>
+                        </div>
+                        <p class="text-red-500 text-md"><?= $errors['productSize'] ?? "" ?></p>
+                    </div>
+                <?php endif; ?>
+                <!-- Add to Cart -->
+                <button class="w-full py-3 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 transition mb-6">
+                    Add to Cart
+                </button>
+                <!-- Description -->
+                <div class="mb-6">
+                    <h2 class="text-lg font-semibold text-gray-800 mb-2">Description</h2>
+                    <p class="text-gray-600 text-sm">
+                        <?= htmlspecialchars($product["productDescription"]) ?>
+                    </p>
+                </div>
+                <!-- Fabric & Care -->
+                <div class="mb-6">
+                    <h2 class="text-lg font-semibold text-gray-800 mb-2">Fabric & Care</h2>
+                    <ul class="list-disc pl-5 text-gray-600 text-sm space-y-1">
+                        <li>Designed for long-lasting performance</li>
+                        <li>Safe and easy to use or consume</li>
+                        <li>Store or handle properly for best results</li>
+                        <li>Suitable for daily use</li>
+                    </ul>
+                </div>
+                <!-- Footer Info -->
+                <div class="grid grid-cols-2 gap-4 text-center text-sm text-gray-600">
+                    <div class="p-4 border rounded-md">
+                        <p class="font-medium">International delivery</p>
+                        <p>Fast worldwide shipping, secure packaging, and reliable service.</p>
+                    </div>
+                    <div class="p-4 border rounded-md">
+                        <p class="font-medium">Loyalty rewards</p>
+                        <p>Earn points on every order and unlock exclusive discounts.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
