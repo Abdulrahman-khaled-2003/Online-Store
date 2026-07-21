@@ -119,7 +119,7 @@ function autoloaderFileNotFound($file)
         :  true;
 }
 
-function stringReplace($class)
+function classNameToFileName($class)
 {
     $class = str_replace("\\", "/", $class);
     $class = str_replace("App/", "", $class);
@@ -131,7 +131,7 @@ function splAutoLoaderHandle($class)
     if (strpos($class, "App\\") !== 0) {
         return;
     }
-    $class = stringReplace($class);
+    $class = classNameToFileName($class);
     $file = base_path("{$class}.php");
     try {
         autoloaderFileNotFound($file);
