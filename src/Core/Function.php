@@ -1,13 +1,14 @@
 <?php
 
 use App\Core\Database;
+use App\Http\Validation\ImageValidation;
 
 require "Database.php";
 
 function dd($value)
 {
     echo "<pre>";
-    echo var_dump($value);
+    var_dump($value);
     echo "</pre>";
     die();
 }
@@ -75,4 +76,49 @@ function db()
         $database = new Database($config['connections'][$config['default']]);
     }
     return $database;
+}
+
+
+function checkColor($category)
+{
+    return ($category === "Clothies-Category" || $category === "Technology-Category") ? true : false;
+}
+
+function checkSize($category)
+{
+    return ($category === "Clothies-Category") ? true : false;
+}
+
+function checkImage($newImage, $oldImage)
+{
+    if ($newImage['image']['name'] === "") {
+        $extension = pathinfo($oldImage, PATHINFO_EXTENSION);
+    } else {
+
+        $extension = pathinfo($newImage['image']['name'], PATHINFO_EXTENSION);
+    }
+    return $extension;
+}
+
+function moveUploadedFile($fileName, $destination)
+{
+    return move_uploaded_file($fileName, $destination);
+}
+
+function checkTypeOfImage($imgTmp)
+{
+    $imgType = mime_content_type($imgTmp);
+    [, $extension] = explode("/", $imgType);
+    return (strtolower($extension) === "png" ||
+        strtolower($extension) === "jpg" ||
+        strtolower($extension) === "jpeg")  ? true : false;
+}
+
+function imageValidation()
+{
+    static $image = null;
+    if ($image === null) {
+        $image = new ImageValidation();
+    }
+    return $image;
 }

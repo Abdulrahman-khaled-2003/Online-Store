@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<?php
+require base_path("Views/Partials/head.phtml"); ?>
+
+<body class="bg-gray-100">
+    <?php require base_path("Views/Partials/nav.phtml") ?>
+
+    <form action="/products/store" method="POST" enctype="multipart/form-data"
+        class=" mt-14 max-w-3xl mx-auto bg-white shadow-md rounded-xl p-6 space-y-6">
+        <input type="hidden" name="id" value="<?= $category['id'] ?>">
+        <h2 class="text-2xl font-bold text-indigo-700">Add a New Product</h2>
+
+        <!-- Product Name -->
+        <div>
+            <label class="block text-sm font-medium text-indigo-600">Product Name</label>
+            <input type="text" name="product_name" placeholder="Enter product name"
+                class="mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 p-3 text-gray-800" />
+            <p class="text-red-500 text-md"> <?= $errors['productName'] ?? "" ?></p>
+        </div>
+        <!-- Price -->
+        <div>
+            <label class="block text-sm font-medium text-indigo-600">Price ($)</label>
+            <input type="text" name="price" placeholder="Enter price"
+                class="mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 p-3 text-gray-800" />
+            <p class="text-red-500 text-md"> <?= $errors['productPrice'] ?? "" ?></p>
+        </div>
+        <!-- category -->
+        <div>
+            <label class="block text-sm font-medium text-indigo-600">Category</label>
+            <input type="text" name="category" value="<?= $category['categoryName'] ?>" readonly
+                class=" cursor-not-allowed mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 p-3 text-gray-800" />
+            <p class="text-red-500 text-md"> <?= $errors['categoryName'] ?? "" ?></p>
+        </div>
+        <!-- Category Color -->
+        </div>
+        <?php if (checkColor($category['categoryName'])) :  ?>
+            <div>
+                <label class="block text-sm font-medium text-indigo-600">Color</label>
+                <div class="flex gap-2 mt-2 flex-wrap">
+                    <?php foreach ($colors as $color) : ?>
+                        <?php $bg = strtolower($color['colorName']);
+                        $bgNum =  ($bg === "black" || $bg === "white") ? $bg : $bg . "-500"
+                        ?>
+                        <input type="checkbox" name="colors[]" value="<?= $bg ?>" id="color-<?= $bg ?>" class="hidden peer/<?= $bg ?>">
+                        <label for="color-<?= $bg ?>"
+                            title="<?= ucfirst($color['colorName']) ?>"
+                            class="w-8 h-8 rounded-full bg-<?= $bgNum ?> border-2 border-gray-300 cursor-pointer 
+                           peer-checked/<?= $bg ?>:ring-2 peer-checked/<?= $bg ?>:ring-indigo-500">
+                        </label>
+                    <?php endforeach; ?>
+                    <p class="text-red-500 text-md"> <?= $errors['productColor'] ?? "" ?></p>
+                </div>
+            </div>
+        <?php endif; ?>
+        <!-- Category Size -->
+        <?php if (checkSize($category['categoryName'])) : ?>
+            <div>
+                <label class="block text-sm font-medium text-indigo-600">Sizes</label>
+                <div class="flex flex-wrap gap-2 mt-2">
+                    <?php foreach ($sizes as $size) : ?>
+                        <input type="checkbox" name="sizes[]" value="<?= $size['sizeName'] ?>" id="size-<?= $size['sizeName'] ?>" class="hidden peer/<?= $size['sizeName'] ?>">
+                        <label for="size-<?= $size['sizeName'] ?>"
+                            class="px-3 py-1 rounded-lg border border-gray-300 text-indigo-700 cursor-pointer peer-checked/<?= $size['sizeName'] ?>:bg-indigo-600 peer-checked/<?= $size['sizeName'] ?>:text-white">
+                            <?= $size['sizeName'] ?>
+                        </label>
+                    <?php endforeach; ?>
+                </div>
+                <p class="text-red-500 text-md"><?= $errors['productSize'] ?? "" ?></p>
+            </div>
+        <?php endif; ?>
+        <!-- Image Upload -->
+        <div>
+            <label class="block text-sm font-medium text-indigo-600">Product Image</label>
+            <input type="file" name="image"
+                class="mt-2 w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer" />
+            <p class="text-red-500 text-md"><?= $errors['productImage'] ?? "" ?></p>
+        </div>
+
+        <!-- Description -->
+        <div>
+            <label class="block text-sm font-medium text-indigo-600">Description</label>
+            <textarea name="description" rows="4" placeholder="Write product description..."
+                class="mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 p-3 text-gray-800"></textarea>
+            <p class="text-red-500 text-md"> <?= $errors['productDescription'] ?? "" ?></p>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="flex justify-end">
+            <button type="submit"
+                class="px-6 py-3 rounded-lg bg-indigo-600 text-white font-semibold shadow hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-300 transition">
+                Save Product
+            </button>
+        </div>
+    </form>
+
+</body>
+
+</html>
