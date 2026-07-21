@@ -2,7 +2,7 @@
 
 namespace App\Core;
 
-use App\Core\Exception\FileNotFoundException;
+use App\Core\Exceptions\FileNotFoundException;
 
 abstract class Validation
 {

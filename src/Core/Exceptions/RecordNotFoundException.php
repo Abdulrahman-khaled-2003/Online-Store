@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Core\Exception;
+namespace App\Core\Exceptions;
 
 use RuntimeException;
 
 class RecordNotFoundException extends RuntimeException{
-        //
+    //
 }

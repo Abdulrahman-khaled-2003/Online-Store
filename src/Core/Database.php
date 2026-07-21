@@ -2,11 +2,9 @@
 
 namespace App\Core;
 
-use App\Core\Exception\QueryException;
+use App\Core\Exceptions\QueryException;
 use PDO;
 use PDOException;
-
-require "Exceptions/QueryException.php";
 
 class Database
 {
@@ -28,7 +26,6 @@ class Database
             $this->statement = $this->connection->prepare($sql);
             $this->statement->execute($params);
         } catch (PDOException $e) {
-            
             throw new QueryException($e->getMessage());
         }
     }
