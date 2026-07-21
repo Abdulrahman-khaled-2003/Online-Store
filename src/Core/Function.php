@@ -115,8 +115,7 @@ function checkTypeOfImage($imgTmp)
 
 function autoloaderFileNotFound($file)
 {
-    return (! file_exists($file)) ? throw new FileNotFoundException("Autoloader error: Class file not found: {$file}")
-        :  true;
+    if (! file_exists($file)) throw new FileNotFoundException("Autoloader error: Class file not found: {$file}");
 }
 
 function classNameToFileName($class)
