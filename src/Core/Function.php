@@ -1,9 +1,8 @@
 <?php
 
 use App\Core\Database;
+use App\Core\Exceptions\FileNotFoundException;
 use App\Http\Validation\ImageValidation;
-
-require "Database.php";
 
 function dd($value)
 {
@@ -112,6 +111,33 @@ function checkTypeOfImage($imgTmp)
     return (strtolower($extension) === "png" ||
         strtolower($extension) === "jpg" ||
         strtolower($extension) === "jpeg")  ? true : false;
+}
+
+function autoloaderFileNotFound($file)
+{
+    if (! file_exists($file)) throw new FileNotFoundException("Autoloader error: Class file not found: {$file}");
+}
+
+function classNameToFileName($class)
+{
+    $class = str_replace("\\", "/", $class);
+    $class = str_replace("App/", "", $class);
+    return $class;
+}
+
+function splAutoLoaderHandle($class)
+{
+    if (strpos($class, "App\\") !== 0) {
+        return;
+    }
+    $class = classNameToFileName($class);
+    $file = base_path("{$class}.php");
+    try {
+        autoloaderFileNotFound($file);
+    } catch (RuntimeException $e) {
+        serverError($e->getMessage(), $e->getFile(), $e->getLine());
+    }
+    require $file;
 }
 
 function imageValidation()

@@ -1,4 +1,7 @@
 <?php
+
+use App\Core\Exceptions\FileNotFoundException;
+
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -6,11 +9,14 @@ error_reporting(E_ALL);
 session_start();
 
 require __DIR__ . ("/../src/Core/Function.php");
+require __DIR__ . ("/../src/Core/Exceptions/FileNotFoundException.php");
 
-require base_path("Core/Router.php");
+spl_autoload_register(function ($class) {
+        return splAutoLoaderHandle($class);
+});
 
-use App\Core\Exception\RecordNotFoundException;
-use Core\Router;
+use App\Core\Exceptions\RecordNotFoundException;
+use App\Core\Router;
 
 $uri = parse_url($_SERVER['REQUEST_URI'])["path"];
 $method = $_POST["_method"] ?? $_SERVER["REQUEST_METHOD"];

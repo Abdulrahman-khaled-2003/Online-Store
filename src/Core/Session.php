@@ -4,7 +4,6 @@ namespace App\Core;
 
 class Session
 {
-
     public static function has(string $key): bool{
         return $_SESSION['_flash'][$key] ?? $_SESSION[$key] ?? false ;
     }
