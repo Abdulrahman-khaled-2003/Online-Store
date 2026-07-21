@@ -72,17 +72,30 @@ CREATE DATABASE online_store;
 
 ---
 
-### 3. Import the SQL File
+## Create the Database Tables
 
-Import the provided SQL file into the database.
+Run the following SQL statements to create the required tables for the project. These tables define the database structure for storing categories and products.
 
-For example:
+```sql
+CREATE TABLE Categories (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    categoryName VARCHAR(255) NOT NULL,
+    categoryDescription TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
 
-```bash
-mysql -u root -p online_store < online_store.sql
+CREATE TABLE Products (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    productName VARCHAR(255) NOT NULL,
+    productDescription TEXT,
+    price DECIMAL(10, 2) NOT NULL,
+    category_id INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (category_id) REFERENCES Categories(id)
+);
 ```
-
-Or import it using **phpMyAdmin**.
 
 ---
 
