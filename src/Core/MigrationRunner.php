@@ -17,4 +17,10 @@ class MigrationRunner{
             )
         ");
     }
+
+    protected function getRanMigrations(): array
+{
+    $rows = db()->fetchAll("SELECT migration_name FROM migrations");
+    return array_column($rows, 'migration_name');
+}
 }
