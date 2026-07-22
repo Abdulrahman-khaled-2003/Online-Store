@@ -23,4 +23,10 @@ class MigrationRunner{
     $rows = db()->fetchAll("SELECT migration_name FROM migrations");
     return array_column($rows, 'migration_name');
 }
+
+protected function getNextBatchNumber(): int
+{
+    $result = db()->fetch("SELECT MAX(batch) as max_batch FROM migrations");
+    return ($result['max_batch'] ?? 0) + 1;
+}
 }
