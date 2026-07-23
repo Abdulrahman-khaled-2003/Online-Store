@@ -41,4 +41,42 @@ class MigrationRunner
 
         return implode('', $words);
     }
+
+    public function run(): void
+{
+    $ran = $this->getRanMigrations();
+    $files = glob($this->migrationsPath . '/*.php');
+    sort($files);
+
+    $batch = $this->getNextBatchNumber();
+    $executedAny = false;
+
+    foreach ($files as $file) {
+        $migrationName = basename($file, '.php');
+
+        if (in_array($migrationName, $ran)) {
+            continue;
+        }
+
+        require_once $file;
+
+        $className = $this->resolveClassName($migrationName);
+        $fullClassName = "App\\Database\\Migrations\\$className";
+
+        $migration = new $fullClassName();
+        $migration->up();
+
+        db()->execute(
+            "INSERT INTO migrations (migration_name, batch) VALUES (?, ?)",
+            [$migrationName, $batch]
+        );
+
+        echo "Migrated: $migrationName\n";
+        $executedAny = true;
+    }
+
+    if (!$executedAny) {
+        echo "Not Found Any New Migration \n";
+    }
+}
 }
