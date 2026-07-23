@@ -85,4 +85,13 @@ class MigrationRunner
         $result = db()->fetch("SELECT MAX(batch) as max_batch FROM migrations");
         return $result['max_batch'] ?? 0;
     }
+
+    protected function getMigrationsInBatch(int $batch)
+    {
+        $rows = db()->fetchAll(
+            "SELECT migration_name FROM migrations WHERE batch = ? ORDER BY id DESC",
+            [$batch]
+        );
+        return array_column($rows, 'migration_name');
+    }
 }
