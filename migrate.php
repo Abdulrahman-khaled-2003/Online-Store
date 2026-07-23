@@ -9,9 +9,14 @@ use App\Core\Exceptions\QueryException;
 use App\Core\MigrationRunner;
 
 $runner = new MigrationRunner("src/Database/Migrations");
+$command = $argv[1] ?? null;
 
 try {
-    $runner->run();
+    if (strtolower($command) === "rollback") {
+        $runner->rollBack();
+    } else {
+        $runner->run();
+    }
 } catch (QueryException $e) {
     errorLog($e->getMessage(), $e->getFile(), $e->getLine());
     echo "error is found, Check error.log";
