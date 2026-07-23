@@ -94,4 +94,35 @@ class MigrationRunner
         );
         return array_column($rows, 'migration_name');
     }
+
+    public function rollBack()
+    {
+        $batch = $this->getLastBatchNumber();
+
+        if ($batch === 0) {
+            return;
+        }
+
+        $migrations = $this->getMigrationsInBatch($batch);
+
+        foreach ($migrations as $migrationName) {
+
+            $file = $this->migrationsPath . "/" . $migrationName . ".php";
+
+            require_once $file;
+
+            $className = $this->resolveClassName($migrationName);
+            $allClassName = "App\\Database\\Migrations\\$className";
+
+            $migration = new $allClassName();
+            $migration->down();
+
+            db()->execute(
+                "DELETE FROM migrations WHERE migration_name = ?",
+                [$migrationName]
+            );
+            
+            echo "Rolled back: $migrationName\n";
+        }
+    }
 }
