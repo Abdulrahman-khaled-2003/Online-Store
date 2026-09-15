@@ -2,7 +2,8 @@
     "name": "win-11/online-store",
     "autoload": {
         "psr-4": {
-            "App\\": "src/"
+            "App\\": "src/" ,
+            "Symfony\\" : "vendor/"
         },
         "files": [
             "src/Core/Function.php"
