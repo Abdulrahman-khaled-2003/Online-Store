@@ -131,7 +131,7 @@ function imageValidation()
 
 function migCommand(?string $command, $argTwo = null)
 {
-    $runner = new MigrationRunner("src/Database/Migrations");
+    $runner = new MigrationRunner();
 
     switch ($command) {
         case "run":
