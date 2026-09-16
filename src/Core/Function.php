@@ -1,6 +1,7 @@
 <?php
 
 use App\Core\Database;
+use App\Core\Exceptions\DirectoryNotFoundException;
 use App\Core\MigrationCreator;
 use App\Core\MigrationRunner;
 use App\Core\Session;
@@ -129,38 +130,6 @@ function imageValidation()
     return $image;
 }
 
-function migCommand(?string $command, $argTwo = null)
-{
-    $runner = new MigrationRunner();
-
-    switch ($command) {
-        case "run":
-            $runner->run();
-            return true;
-
-        case "rollback":
-            $runner->rollBack();
-            return true;
-
-        case "make":
-            (new MigrationCreator($argTwo, "src/Database/Migrations"))->make();
-            return true;
-
-        case null:
-            echo "Usage:
-     command [arguments]
-
-Available Commands:
-   run          Migrates new database upgrades
-   rollback     Rollbacks the last migration";
-            return true;
-
-        default:
-            echo "Unknown Command : {$command}";
-            return false;
-    }
-}
-
 function resolveClassName(string $migrationName): string
 {
     $withoutTimestamp = preg_replace('/^\d{4}_\d{2}_\d{2}_\d{6}_/', '', $migrationName);
@@ -175,23 +144,6 @@ function sterilizeMigrationFileName(string $file): string
     $file = explode("_", $file);
     $file = array_slice($file, 4, count($file) - 1);
     return implode("_", $file);
-}
-
-function errorHandlingAtMigrateFile(?string $command, ?string $argTwo)
-{
-    try {
-        return migCommand($command, $argTwo);
-    } catch (RuntimeException $e) {
-        errorLog($e->getMessage(), $e->getFile(), $e->getLine());
-        echo "error is found, Check error.log";
-        return false;
-    } catch (Exception $e) {
-        errorLog($e->getMessage(), $e->getFile(), $e->getLine());
-        echo "error is found, Check error.log";
-        return false;
-    } finally {
-        db()->disConnect();
-    }
 }
 
 function category()
@@ -253,3 +205,19 @@ function migrationsExists(?array $migrations){
             }
             return true;
 }
+
+function migrationFileExists(string $migrationName , string $migrationPath): bool
+    {
+        if (! is_dir($migrationPath)) {
+            throw new DirectoryNotFoundException("Directory Of Migration Path Not Found..!");
+        }
+        $files = glob($migrationPath . '/*.php');
+
+        foreach ($files as $file) {
+            $currentFile = sterilizeMigrationFileName($file);
+            if ($currentFile === $migrationName) {
+                return false;
+            }
+        }
+        return true;
+    }

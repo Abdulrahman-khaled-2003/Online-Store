@@ -2,6 +2,7 @@
 
 use App\Console\Commands\MigrationRollbackCommand;
 use App\Console\Commands\MigrationRunCommand;
+use App\Console\Commands\MakeMigrationCommand;
 use Symfony\Component\Console\Application;
 
 require __DIR__ . "/vendor/autoload.php";
@@ -10,6 +11,7 @@ require __DIR__ . "/vendor/autoload.php";
 $application = new Application("Online-store" , "1.0.0");
 $application->addCommands([
     new MigrationRunCommand(),
-    new MigrationRollbackCommand()
+    new MigrationRollbackCommand(),
+    new MakeMigrationCommand()
 ]);
 $application->run();
