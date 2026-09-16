@@ -2,7 +2,6 @@
 
 namespace App\Core;
 
-use App\Core\Exceptions\DirectoryNotFoundException;
 
 class MigrationCreator
 {
@@ -16,11 +15,11 @@ class MigrationCreator
 
     public function make()
     {
-        $this->createMigrationFileWithContent($this->migrationName);
+        $this->createMigrationFileWithContent();
         file_put_contents($this->migrationFilePath, $this->contentOfMigrationFile);
     }
 
-    private function createMigrationFileWithContent(string $migrationName){   
+    private function createMigrationFileWithContent(){   
             $migrationFileName = date("Y_m_d_His") . "_{$this->migrationName}";
             $this->migrationFilePath = $this->migrationsPath . "/" . $migrationFileName . ".php";
             $className = resolveClassName($this->migrationName);
