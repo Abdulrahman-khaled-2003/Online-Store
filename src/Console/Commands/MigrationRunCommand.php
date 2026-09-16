@@ -20,11 +20,15 @@ class MigrationRunCommand extends Command{
 	protected function execute(InputInterface $input, OutputInterface $output): int
     {
             $runner = new MigrationRunner();
-            $migrations = $runner->run();
-            foreach($migrations as $migration){
-                $output->writeln("Migrated:" . $migration );
+            $runMigrations = $runner->run();
+            $migExists = migrationsExists($runMigrations);
+            if(! $migExists){
+                $output->writeln("Not Found Migrations.!");
+            }else{
+                foreach($runMigrations as $migration){
+                    $output->writeln("Migrated:" . $migration );
+                }
             }
-
             return Command::SUCCESS;
     }
 }

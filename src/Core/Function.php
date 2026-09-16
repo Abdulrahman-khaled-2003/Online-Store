@@ -246,3 +246,10 @@ function destorySessionForLoginUser()
     session_destroy();
     redirect('/login');
 }
+
+function migrationsExists(?array $migrations){
+            if( empty($migrations)){
+                return false;
+            }
+            return true;
+}

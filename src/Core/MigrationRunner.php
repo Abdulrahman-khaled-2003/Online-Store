@@ -6,6 +6,7 @@ use App\Core\Exceptions\FileNotFoundException;
 
 class MigrationRunner
 {
+    protected array $migrations = [];
     public function __construct(protected string $migrationsPath = "src/Database/Migrations")
     {
         //
@@ -65,14 +66,9 @@ class MigrationRunner
                 "INSERT INTO migrations (migration_name, batch) VALUES (?, ?)",
                 [$migrationName, $batch]
             );
-            $migrations[] = $migrationName; 
-            $executedAny = true;
-            }
-        if (!$executedAny) {
-            echo "Not Found Any New Migration \n";
-        }else{
-            return $migrations;
+            $this->migrations[] = $migrationName;
         }
+        return $this->migrations;
     }
 
     protected function getLastBatchNumber()
@@ -96,7 +92,7 @@ class MigrationRunner
 
         if ($batch === 0) {
             return;
-            }
+        }
 
         $migrations = $this->getMigrationsInBatch($batch);
 
@@ -119,8 +115,8 @@ class MigrationRunner
                 "DELETE FROM migrations WHERE migration_name = ?",
                 [$migrationName]
             );
-
-            echo "Rolled back: $migrationName\n";
+            $this->migrations[] = $migrationName;
         }
+        return $this->migrations;
     }
 }
