@@ -199,14 +199,14 @@ function destorySessionForLoginUser()
     redirect('/login');
 }
 
-function migrationsExists(?array $migrations){
+function migrationsNotEmpty(?array $migrations){
             if( empty($migrations)){
                 return false;
             }
             return true;
 }
 
-function migrationFileExists(string $migrationName , string $migrationPath): bool
+function migrationFileExists(string $migrationName , string $migrationPath = "src/Database/Migrations"): bool
     {
         if (! is_dir($migrationPath)) {
             throw new DirectoryNotFoundException("Directory Of Migration Path Not Found..!");

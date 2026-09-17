@@ -3,13 +3,14 @@
 namespace App\Console\Commands;
 
 use App\Core\MigrationCreator;
+use Exception;
 use Override;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\Output;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
     name: "migrate:make",
@@ -26,27 +27,39 @@ class MakeMigrationCommand extends Command
     }
 
     #[Override]
-    protected function execute(InputInterface $input, OutputInterface $output): int
-    {
+    protected function execute(
+        InputInterface $input,
+        OutputInterface $output
+    ): int {
+        $style = new SymfonyStyle($input, $output);
 
-        $migrationName = $input->getArgument('migration-name');
-        $num = $this->handleMakeCommand($migrationName, $output);
-        if ($num == 0) {
-            $makeMigration = new MigrationCreator($migrationName, "src/Database/Migrations");
-            $makeMigration->make();
-            $output->writeln("Migration File: $migrationName is added Successfully To Migrations Directory");
-            return Command::SUCCESS;
+        try {
+            $migrationName = $input->getArgument('migration-name');
+            $num = $this->handleMakeCommand($migrationName, $input, $output);
+            if ($num === Command::SUCCESS) {
+                $makeMigration = new MigrationCreator($migrationName);
+                $makeMigration->make();
+                $style->success("Migration File: $migrationName is added Successfully To Migrations Directory");
+
+                return Command::SUCCESS;
+            }
+
+            return Command::FAILURE;
+        } catch (Exception $e) {
+            errorLog($e->getMessage(), $e->getFile(), $e->getLine());
+            $style->error($e->getMessage());
+            return Command::FAILURE;
         }
-        return Command::FAILURE;
     }
 
-    private function handleMakeCommand(string $migrationName, OutputInterface $output): int
+    private function handleMakeCommand(string $migrationName, InputInterface $input, OutputInterface $output): int
     {
-        if(!preg_match('/^[a-z_][a-z0-9_]*$/', $migrationName)) {
-            $output->writeLn("Invalid Class Name: {$migrationName} \nShould start with a lowercase letter or underscore, followed by lowercase letters, numbers, or underscores only..!");
+        $style = new SymfonyStyle($input, $output);
+        if (!preg_match('/^[a-z_][a-z0-9_]*$/', $migrationName)) {
+            $style->error("Invalid Class Name: {$migrationName} \nShould start with a lowercase letter or underscore, followed by lowercase letters, numbers, or underscores only..!");
             return Command::FAILURE;
-        } elseif (! migrationFileExists($migrationName, "src/Database/Migrations")) {
-            $output->writeln("This migrationName exists: {$migrationName}. \nThe Migration File cannot be duplicated again!");
+        } elseif (! migrationFileExists($migrationName)) {
+            $style->error("This migrationName exists: {$migrationName}. \nThe Migration File cannot be duplicated again!");
             return Command::FAILURE;
         }
         return Command::SUCCESS;

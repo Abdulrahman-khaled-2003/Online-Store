@@ -19,7 +19,7 @@ class Session
 
     public static function get(string $key)
     {
-        return $_SESSION['_flash'][$key] ?? $_SESSION[$key] ?? null;
+        return $_SESSION['_flash'][$key] ?? $_SESSION[$key] ?? "";
     }
 
     public static function flash(string $key, string | float $value)
