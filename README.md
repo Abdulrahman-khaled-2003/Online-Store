@@ -2,7 +2,7 @@
 
 A simple **E-commerce** application built with **PHP** and **MySQL** using a custom **MVC architecture**. This project was created as a learning experience to understand how modern web applications work behind the scenes without relying on frameworks.
 
-The application demonstrates core backend concepts such as routing, controllers, views, database interaction, and CRUD operations while following clean code practices and object-oriented programming principles.
+The application demonstrates core backend concepts such as routing, controllers, views, database interaction, CRUD operations, database migrations, console commands, and object-oriented programming principles.
 
 ---
 
@@ -18,6 +18,9 @@ The application demonstrates core backend concepts such as routing, controllers,
 * PDO Database Connection
 * PSR-4 Autoloading
 * Object-Oriented PHP
+* Database Migration System
+* Symfony Console Commands
+* Console Error Handling
 
 ---
 
@@ -29,7 +32,9 @@ The application demonstrates core backend concepts such as routing, controllers,
 * Tailwind CSS
 * MVC Architecture
 * PDO
+* Composer
 * Composer Autoloading (PSR-4)
+* Symfony Console
 
 ---
 
@@ -40,6 +45,7 @@ Before running the project, make sure the following software is installed:
 * PHP **8.0** or higher
 * MySQL **5.7+** or MariaDB **10.3+**
 * Git
+* Composer
 * PHP Built-in Web Server
 
 Optional:
@@ -69,8 +75,10 @@ Install the project dependencies and generate the Composer autoloader:
 ```bash
 composer install
 ```
+
+This installs the required Composer packages, including **Symfony Console**, and generates the Composer autoloader.
+
 ---
- 
 
 ### 3. Create the Database
 
@@ -78,33 +86,6 @@ Create a new database named:
 
 ```sql
 CREATE DATABASE online_store;
-```
-
----
-
-## Create the Database Tables
-
-Run the following SQL statements to create the required tables for the project. These tables define the database structure for storing categories and products.
-
-```sql
-CREATE TABLE Categories (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    categoryName VARCHAR(255) NOT NULL,
-    categoryDescription TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
-
-CREATE TABLE Products (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    productName VARCHAR(255) NOT NULL,
-    productDescription TEXT,
-    price DECIMAL(10, 2) NOT NULL,
-    category_id INT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (category_id) REFERENCES Categories(id)
-);
 ```
 
 ---
@@ -138,6 +119,7 @@ return [
     ]
 ];
 ```
+
 ---
 
 ### 5. Verify PHP Installation
@@ -152,7 +134,21 @@ You should see PHP **8.0** or later.
 
 ---
 
-### 6. Start the Development Server
+### 6. Run Database Migrations
+
+After configuring the database, run:
+
+```bash
+php console migrate:run
+```
+
+This will execute all pending migrations and create the required database tables.
+
+For more information about the available migration commands, see the [Database Migrations](#database-migrations) section.
+
+---
+
+### 7. Start the Development Server
 
 ```bash
 php -S localhost:8000 -t Public/
@@ -160,7 +156,7 @@ php -S localhost:8000 -t Public/
 
 Open your browser:
 
-```
+```text
 http://localhost:8000
 ```
 
@@ -168,11 +164,288 @@ If everything is configured correctly, the application should load successfully.
 
 ---
 
-## Database Migrations
+# Database Migrations
 
-In addition to creating the tables manually with the SQL statements above, this project includes a simple **custom migration system** to manage database schema changes in a structured and version-controlled way. This is especially useful for anyone cloning the project, since new migrations can add tables/columns (like `Colors`, `Sizes`, `Product_Color`, `Product_Size`, etc.) without you having to write the SQL by hand.
+The project includes a custom **database migration system** powered by **Symfony Console**.
 
-### Migration Files Location
+Migrations provide a structured and version-controlled way to manage database schema changes without manually executing SQL statements every time the database structure changes.
+
+All migration files are stored inside:
+
+```text
+src/Database/Migrations/
+```
+
+Each migration contains two methods:
+
+* `up()` — applies the database changes.
+* `down()` — reverses the database changes.
+
+---
+
+## Console Application
+
+The migration system is exposed through a dedicated console entry point:
+
+```text
+console
+```
+
+The console application is built using **Symfony Console** and provides a structured command-line interface for managing migrations.
+
+General syntax:
+
+```bash
+php console <command> [arguments]
+```
+
+To see all available commands:
+
+```bash
+php console list
+```
+
+---
+
+## Available Migration Commands
+
+### 1. Create a New Migration
+
+Create a new migration using:
+
+```bash
+php console migrate:make <migration_name>
+```
+
+Example:
+
+```bash
+php console migrate:make create_colors_table
+```
+
+This generates a timestamped migration file inside:
+
+```text
+src/Database/Migrations/
+```
+
+The generated migration contains empty `up()` and `down()` methods ready to be implemented.
+
+Example structure:
+
+```php
+<?php
+
+namespace App\Database\Migrations;
+
+use App\Core\Migration;
+
+class CreateColorsTable extends Migration
+{
+    public function up(): void
+    {
+        // Create table
+    }
+
+    public function down(): void
+    {
+        // Drop table
+    }
+}
+```
+
+The migration name must start with a lowercase letter or underscore, followed by lowercase letters, numbers, or underscores.
+
+Valid examples:
+
+```text
+create_colors_table
+create_products_table
+add_price_to_products
+add_user_id_to_orders
+```
+
+---
+
+### 2. Run Migrations
+
+Run all pending migrations:
+
+```bash
+php console migrate:run
+```
+
+The migration runner:
+
+1. Finds migration files.
+2. Determines which migrations have already been executed.
+3. Executes only pending migrations.
+4. Records executed migrations in the `migrations` table.
+5. Groups migrations executed during the same run into a batch.
+
+Example:
+
+```bash
+php console migrate:run
+```
+
+If migrations are successfully executed, the console displays formatted success messages.
+
+If no pending migrations exist, the console displays a warning.
+
+---
+
+### 3. Rollback Migrations
+
+Rollback the latest migration batch:
+
+```bash
+php console migrate:rollback
+```
+
+The rollback process:
+
+1. Finds the latest migration batch.
+2. Executes the `down()` method of each migration in that batch.
+3. Removes the executed migrations from the `migrations` table.
+
+Example:
+
+```bash
+php console migrate:rollback
+```
+
+This allows the latest group of database changes to be reversed.
+
+---
+
+## Migration Batches
+
+The migration system uses **batch numbers** to group migrations.
+
+For example, running:
+
+```bash
+php console migrate:run
+```
+
+may execute:
+
+```text
+CreateCategoriesTable
+CreateProductsTable
+CreateColorsTable
+```
+
+All migrations executed during that run belong to the same batch.
+
+The database may contain:
+
+| migration               | batch |
+| ----------------------- | ----- |
+| create_categories_table | 1     |
+| create_products_table   | 1     |
+| create_colors_table     | 1     |
+
+If another migration is created and executed later:
+
+```text
+add_price_to_products
+```
+
+it may belong to batch `2`.
+
+Therefore:
+
+```bash
+php console migrate:rollback
+```
+
+rolls back the latest batch rather than randomly selecting a migration.
+
+---
+
+## Console Error Handling
+
+Console commands use Symfony Console's output system to provide formatted feedback.
+
+For example, successful operations are displayed using formatted success messages, while warnings and errors are displayed using appropriate console styles.
+
+The application also handles runtime exceptions during console execution.
+
+For example, if the database connection fails:
+
+```text
+[ERROR]
+SQLSTATE[HY000] [1045] Access denied for user...
+```
+
+The command exits with a failure status instead of silently continuing after an exception.
+
+The console application also uses appropriate exit codes:
+
+* `0` — successful execution
+* non-zero — command failed
+
+This makes the console suitable for both manual usage and future automation or scripts.
+
+---
+
+## Symfony Console Architecture
+
+The console application is separated into commands, while the migration logic remains inside the project's core classes.
+
+The basic flow is:
+
+```text
+php console migrate:run
+        │
+        ▼
+Console Application
+        │
+        ▼
+MigrationRunCommand
+        │
+        ▼
+MigrationRunner
+        │
+        ▼
+Database
+```
+
+For creating migrations:
+
+```text
+php console migrate:make create_users_table
+        │
+        ▼
+Console Application
+        │
+        ▼
+MakeMigrationCommand
+        │
+        ▼
+MigrationCreator
+        │
+        ▼
+Migration File
+```
+
+Symfony Console is responsible for the **command-line interface**, including:
+
+* Command registration
+* Arguments
+* Input handling
+* Console output
+* Formatting
+* Exit codes
+* Command execution lifecycle
+
+The project's core classes remain responsible for the actual migration logic.
+
+---
+
+## Migration Files Location
 
 All migration files live inside:
 
@@ -180,67 +453,80 @@ All migration files live inside:
 src/Database/Migrations/
 ```
 
-Each migration file contains a class with two methods:
-
-* `up()` — defines what happens when the migration runs (e.g. creating/altering a table).
-* `down()` — defines how to reverse it (e.g. dropping the table/column).
-
-### Running Migrations
-
-All migration commands are executed through the `migrate.php` file in the project root:
-
-```bash
-php migrate.php <command> [arguments]
-```
-
-#### 1. Create a New Migration
-
-```bash
-php migrate.php make <migration_name>
-```
-
 Example:
 
-```bash
-php migrate.php make create_colors_table
+```text
+src/Database/Migrations/
+├── 2026_09_01_120000_create_categories_table.php
+├── 2026_09_01_120500_create_products_table.php
+├── 2026_09_01_121000_create_colors_table.php
+└── 2026_09_01_121500_create_sizes_table.php
 ```
 
-This generates a new timestamped migration file inside `src/Database/Migrations/` with an empty `up()` and `down()` method ready to be filled in.
+Each migration contains:
 
-> **Note:** the migration name must start with a lowercase letter or underscore, followed by lowercase letters, numbers, or underscores only (e.g. `create_colors_table`, `add_price_to_products`).
-
-#### 2. Run Migrations
-
-```bash
-php migrate.php run
+```php
+public function up(): void
 ```
 
-This executes all migrations that haven't been applied yet (in order), and records each one in a `migrations` table so it won't run again. If there's nothing new to run, it will simply let you know.
+and:
 
-#### 3. Rollback Migrations
-
-```bash
-php migrate.php rollback
+```php
+public function down(): void
 ```
 
-This rolls back the **last batch** of migrations that were executed, by calling each migration's `down()` method.
+The `up()` method applies the migration, while `down()` reverses it.
 
-### How It Works
+---
 
-* The first time you run any migration command, a `migrations` table is created automatically in your database to keep track of which migrations have already run.
-* Every time you run `php migrate.php run`, all newly executed migrations are grouped together into a single **batch number**.
-* Running `php migrate.php rollback` will undo the migrations from the most recent batch only.
+## Quick Migration Workflow
 
-### Quick Example for New Contributors
-
-If you just cloned the project and want to get your database schema fully up to date using migrations instead of manual SQL:
+After cloning the project:
 
 ```bash
 cd Online-Store
+```
 
-# Make sure your database connection is configured in src/config/database.php
+Install dependencies:
 
-php migrate.php run
+```bash
+composer install
+```
+
+Configure the database:
+
+```text
+src/config/database.php
+```
+
+Run all migrations:
+
+```bash
+php console migrate:run
+```
+
+Create a new migration when needed:
+
+```bash
+php console migrate:make create_orders_table
+```
+
+After implementing the migration, run:
+
+```bash
+php console migrate:run
+```
+
+To undo the latest migration batch:
+
+```bash
+php console migrate:rollback
+```
+
+To see all available commands:
+
+```bash
+php console list
 ```
 
 ---
@@ -253,11 +539,11 @@ The application uses a relational MySQL database to organize products, categorie
 
 Stores all product categories.
 
-| Column              | Description           |
-| ------------------- | --------------------- |
-| id                  | Primary key           |
-| categoryName        | Category name         |
-| categoryDescription | Category description  |
+| Column              | Description          |
+| ------------------- | -------------------- |
+| id                  | Primary key          |
+| categoryName        | Category name        |
+| categoryDescription | Category description |
 
 ---
 
@@ -266,7 +552,7 @@ Stores all product categories.
 Stores the application's products.
 
 | Column             | Description                |
-| ------------------ | --------------------------- |
+| ------------------ | -------------------------- |
 | id                 | Primary key                |
 | productName        | Product name               |
 | productDescription | Product description        |
@@ -279,10 +565,10 @@ Stores the application's products.
 
 Stores the available colors.
 
-| Column     | Description           |
-| ---------- | --------------------- |
-| id         | Primary key           |
-| colorName  | Color name            |
+| Column    | Description |
+| --------- | ----------- |
+| id        | Primary key |
+| colorName | Color name  |
 
 ---
 
@@ -290,10 +576,10 @@ Stores the available colors.
 
 Stores the available product sizes.
 
-| Column     | Description           |
-| ---------- | --------------------- |
-| id         | Primary key           |
-| sizeName   | Size name             |
+| Column   | Description |
+| -------- | ----------- |
+| id       | Primary key |
+| sizeName | Size name   |
 
 ---
 
@@ -309,7 +595,7 @@ A pivot table that represents the many-to-many relationship between products and
 
 ---
 
-### Database Relationships
+## Database Relationships
 
 * One **Category** can contain many **Products**.
 * One **Product** belongs to one **Category**.
@@ -328,12 +614,12 @@ Online-Store/
 ├── Public/
 │   ├── assets/
 │   │   └── images/
-│   │       ├── Categories/      # Category images
-│   │       └── Products/        # Product images
-│   └── index.php                # Application entry point (Front Controller)
+│   │       ├── Categories/       # Category images
+│   │       └── Products/         # Product images
+│   └── index.php                 # Application entry point (Front Controller)
 │
 ├── src/
-│   ├── Core/                    # Core framework classes
+│   ├── Core/                     # Core framework classes
 │   │   ├── Auth.php
 │   │   ├── Database.php
 │   │   ├── Function.php
@@ -345,23 +631,29 @@ Online-Store/
 │   │   ├── Router.php
 │   │   ├── Session.php
 │   │   ├── Validation.php
-│   │   └── Exceptions/          # Custom exception classes
+│   │   └── Exceptions/           # Custom exception classes
+│   │
+│   ├── Console/
+│   │   └── Commands/             # Symfony Console commands
+│   │       ├── MakeMigrationCommand.php
+│   │       ├── MigrationRunCommand.php
+│   │       └── MigrationRollbackCommand.php
 │   │
 │   ├── Http/
-│   │   ├── Controllers/         # Handle incoming HTTP requests
+│   │   ├── Controllers/          # Handle incoming HTTP requests
 │   │   │   ├── AuthController.php
 │   │   │   ├── CategoryController.php
 │   │   │   ├── Controller.php
 │   │   │   ├── HomeController.php
 │   │   │   └── ProductController.php
-│   │   └── Validation/          # Request validation classes and rules
+│   │   └── Validation/           # Request validation classes and rules
 │   │       ├── CategoryValidation.php
 │   │       ├── ImageValidation.php
 │   │       ├── LoginValidation.php
 │   │       ├── ProductValidation.php
 │   │       └── RegisterValidation.php
 │   │
-│   ├── Models/                  # Eloquent-style models
+│   ├── Models/                   # Eloquent-style models
 │   │   ├── Category.php
 │   │   ├── Color.php
 │   │   ├── Product.php
@@ -371,11 +663,11 @@ Online-Store/
 │   │   └── User.php
 │   │
 │   ├── Database/
-│   │   └── Migrations/          # Database migration files
+│   │   └── Migrations/           # Database migration files
 │   │
 │   ├── Views/
-│   │   ├── Partials/            # Reusable view components (head, header, nav)
-│   │   └── Template/            # Page templates
+│   │   ├── Partials/             # Reusable view components
+│   │   └── Template/              # Page templates
 │   │       ├── Auth/
 │   │       ├── Categories/
 │   │       ├── Category/
@@ -384,18 +676,17 @@ Online-Store/
 │   │       └── statusCode.phtml
 │   │
 │   └── config/
-│       ├── database.php         # Database configuration
-│       └── routes.php           # Route definitions
+│       ├── database.php          # Database configuration
+│       └── routes.php            # Route definitions
 │
 ├── logs/
-│   └── error.log                # Application error log
+│   └── error.log                 # Application error log
 │
-├── migrate.php                  # CLI entry point for the migration system
+├── console                       # Symfony Console entry point
 ├── composer.json
 ├── composer.lock
-└── README.md                    # Project documentation
+└── README.md                     # Project documentation
 ```
-
 
 ---
 
@@ -403,20 +694,27 @@ Online-Store/
 
 After completing the installation steps:
 
-1. Start your MySQL server.
-2. Start the PHP development server.
+### 1. Start MySQL
+
+Make sure your MySQL server is running.
+
+### 2. Run Migrations
+
+```bash
+php console migrate:run
+```
+
+### 3. Start the PHP Development Server
 
 ```bash
 php -S localhost:8000 -t Public/
 ```
 
-Open your browser and visit:
+### 4. Open the Application
 
-```
+```text
 http://localhost:8000
 ```
-
-The application should now be running.
 
 ---
 
@@ -427,12 +725,16 @@ Every time you want to continue working on the project:
 ```bash
 cd Online-Store
 
+composer install
+
+php console migrate:run
+
 php -S localhost:8000 -t Public/
 ```
 
 Then open:
 
-```
+```text
 http://localhost:8000
 ```
 
