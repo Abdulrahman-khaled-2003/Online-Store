@@ -6,7 +6,8 @@ use App\Core\Exceptions\FileNotFoundException;
 
 class MigrationRunner
 {
-    public function __construct(protected $migrationsPath)
+    protected array $migrations = [];
+    public function __construct(protected string $migrationsPath = "src/Database/Migrations")
     {
         //
         $this->createMigrationsTableIfNotExists();
@@ -35,7 +36,7 @@ class MigrationRunner
         return ($result['max_batch'] ?? 0) + 1;
     }
 
-    public function run(): void
+    public function run()
     {
         $ran = $this->getRanMigrations();
         $files = glob($this->migrationsPath . '/*.php');
@@ -65,14 +66,9 @@ class MigrationRunner
                 "INSERT INTO migrations (migration_name, batch) VALUES (?, ?)",
                 [$migrationName, $batch]
             );
-
-            echo "Migrated: $migrationName\n";
-            $executedAny = true;
+            $this->migrations[] = $migrationName;
         }
-
-        if (!$executedAny) {
-            echo "Not Found Any New Migration \n";
-        }
+        return $this->migrations;
     }
 
     protected function getLastBatchNumber()
@@ -96,7 +92,7 @@ class MigrationRunner
 
         if ($batch === 0) {
             return;
-            }
+        }
 
         $migrations = $this->getMigrationsInBatch($batch);
 
@@ -119,8 +115,8 @@ class MigrationRunner
                 "DELETE FROM migrations WHERE migration_name = ?",
                 [$migrationName]
             );
-
-            echo "Rolled back: $migrationName\n";
+            $this->migrations[] = $migrationName;
         }
+        return $this->migrations;
     }
 }

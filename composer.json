@@ -8,5 +8,7 @@
             "src/Core/Function.php"
         ]
     },
-    "require": {}
+    "require": {
+        "symfony/console": "^7.4"
+    }
 }
