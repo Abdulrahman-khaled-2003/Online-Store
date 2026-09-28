@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Core\Auth;
+use App\Core\Csrf;
 use App\Core\Hash;
 use App\Core\Session;
 use App\Http\Validation\LoginValidation;
@@ -66,8 +67,9 @@ class AuthController extends Controller
 
     // Logout
 
-    public function logout()
+    public function logout(array $attributes)
     {
+        destoryUserTokenForLoginUser();
         destorySessionForLoginUser();
     }
 

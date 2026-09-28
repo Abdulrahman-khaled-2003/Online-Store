@@ -1,5 +1,6 @@
 <?php
 
+use App\Core\Csrf;
 use App\Core\Database;
 use App\Core\Exceptions\DirectoryNotFoundException;
 use App\Core\MigrationCreator;
@@ -195,29 +196,54 @@ function checkFetchMode($statement, $class)
 function destorySessionForLoginUser()
 {
     Session::unset("user_id");
+    Session::unset("user_name");
     session_destroy();
     redirect('/login');
 }
 
-function migrationsNotEmpty(?array $migrations){
-            if( empty($migrations)){
-                return false;
-            }
-            return true;
+function destoryUserTokenForLoginUser()
+{
+    Session::unset("user_token");
 }
 
-function migrationFileExists(string $migrationName , string $migrationPath = "src/Database/Migrations"): bool
-    {
-        if (! is_dir($migrationPath)) {
-            throw new DirectoryNotFoundException("Directory Of Migration Path Not Found..!");
-        }
-        $files = glob($migrationPath . '/*.php');
-
-        foreach ($files as $file) {
-            $currentFile = sterilizeMigrationFileName($file);
-            if ($currentFile === $migrationName) {
-                return false;
-            }
-        }
-        return true;
+function migrationsNotEmpty(?array $migrations)
+{
+    if (empty($migrations)) {
+        return false;
     }
+    return true;
+}
+
+function csrf_token()
+{
+    return (new Csrf)->token();
+}
+
+function csrf()
+{
+    $token = htmlspecialchars(csrf_token());
+    return '<input type="hidden" name="user_token" value="' . $token . '">';
+}
+
+function migrationFileExists(string $migrationName, string $migrationPath = "src/Database/Migrations"): bool
+{
+    if (! is_dir($migrationPath)) {
+        throw new DirectoryNotFoundException("Directory Of Migration Path Not Found..!");
+    }
+    $files = glob($migrationPath . '/*.php');
+
+    foreach ($files as $file) {
+        $currentFile = sterilizeMigrationFileName($file);
+        if ($currentFile === $migrationName) {
+            return false;
+        }
+    }
+    return true;
+}
+
+function verifyUserToken(?string $userToken)
+{
+    if (! Csrf::verify($userToken)) {
+        abort(419, "Page Expired");
+    }
+}

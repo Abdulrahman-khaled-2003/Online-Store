@@ -36,9 +36,7 @@ class CategoryController extends Controller
     public function store(array $attributes)
     {
         Auth::require();
-
         $validated = new CategoryValidation($attributes, $_FILES);
-
         if (!empty($validated->errors)) {
             $this->render("Categories/create", [
                 "categories" => Category::getCategories(),
@@ -63,7 +61,6 @@ class CategoryController extends Controller
     public function update(array $attributes)
     {
         Auth::require();
-
         $this->validated = new CategoryValidation($attributes, $_FILES);
         if (! empty($this->validated->errors)) {
             $this->render("Categories/edit", [
@@ -79,10 +76,10 @@ class CategoryController extends Controller
         redirect("/categories");
     }
 
-    public function destroy(int $id)
+    public function destroy(array $attributes)
     {
-         Auth::require();
-        Category::destroy($id);
+        Auth::require();
+        Category::destroy($attributes['id']);
         redirect("/categories");
     }
 }

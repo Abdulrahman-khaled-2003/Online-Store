@@ -16,10 +16,10 @@ class Csrf
                 return session::get(static::SESSION_KEY);
         }
 
-        public static function verify(string $userToken): bool
+        public static function verify(?string $userToken): bool
         {
+                
                 $sessionToken = Session::get(static::SESSION_KEY);
-
                 if ($userToken == '' || ! $sessionToken) {
                         return false;
                 }
