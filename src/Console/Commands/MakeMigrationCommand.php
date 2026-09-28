@@ -36,7 +36,7 @@ class MakeMigrationCommand extends Command
         try {
             $migrationName = $input->getArgument('migration-name');
             $num = $this->handleMakeCommand($migrationName, $input, $output);
-            if ($num === Command::SUCCESS) {
+            if ($num) {
                 $makeMigration = new MigrationCreator($migrationName);
                 $makeMigration->make();
                 $style->success("Migration File: $migrationName is added Successfully To Migrations Directory");
@@ -49,6 +49,8 @@ class MakeMigrationCommand extends Command
             errorLog($e->getMessage(), $e->getFile(), $e->getLine());
             $style->error($e->getMessage());
             return Command::FAILURE;
+        }finally{
+            db()->disConnect();
         }
     }
 
@@ -57,11 +59,11 @@ class MakeMigrationCommand extends Command
         $style = new SymfonyStyle($input, $output);
         if (!preg_match('/^[a-z_][a-z0-9_]*$/', $migrationName)) {
             $style->error("Invalid Class Name: {$migrationName} \nShould start with a lowercase letter or underscore, followed by lowercase letters, numbers, or underscores only..!");
-            return Command::FAILURE;
+            return false;
         } elseif (! migrationFileExists($migrationName)) {
             $style->error("This migrationName exists: {$migrationName}. \nThe Migration File cannot be duplicated again!");
-            return Command::FAILURE;
+            return false;
         }
-        return Command::SUCCESS;
+        return true;
     }
 }

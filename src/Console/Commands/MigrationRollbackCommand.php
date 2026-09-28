@@ -44,6 +44,8 @@ class MigrationRollbackCommand extends Command
             $style->error($e->getMessage());
             errorLog($e->getMessage(), $e->getFile(), $e->getLine());
             return Command::FAILURE;
+        }finally{
+            db()->disConnect();
         }
     }
 }

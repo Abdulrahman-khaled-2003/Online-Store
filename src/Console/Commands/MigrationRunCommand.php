@@ -45,6 +45,8 @@ class MigrationRunCommand extends Command
             $style->error($e->getMessage());
 
             return Command::FAILURE;
+        }finally{
+            db()->disConnect();
         }
     }
 }
