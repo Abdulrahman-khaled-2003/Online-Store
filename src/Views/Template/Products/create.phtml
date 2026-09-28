@@ -1,13 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <?php
+
+use App\Core\Csrf;
+
 require base_path("Views/Partials/head.phtml"); ?>
+
 <body class="bg-gray-100">
     <?php require base_path("Views/Partials/nav.phtml") ?>
 
     <form action="/products/store" method="POST" enctype="multipart/form-data"
         class=" mt-14 max-w-3xl mx-auto bg-white shadow-md rounded-xl p-6 space-y-6">
         <input type="hidden" name="id" value="<?= $category['id'] ?>">
+        <?= csrf() ?>
         <h2 class="text-2xl font-bold text-indigo-700">Add a New Product</h2>
 
         <!-- Product Name -->
@@ -47,7 +52,7 @@ require base_path("Views/Partials/head.phtml"); ?>
                             class="w-8 h-8 rounded-full bg-<?= $bgNum ?> border-2 border-gray-300 cursor-pointer 
                            peer-checked/<?= $bg ?>:ring-2 peer-checked/<?= $bg ?>:ring-indigo-500">
                         </label>
-                        <?php endforeach; ?>
+                    <?php endforeach; ?>
                     <p class="text-red-500 text-md"> <?= $errors['productColor'] ?? "" ?></p>
                 </div>
             </div>
@@ -93,4 +98,5 @@ require base_path("Views/Partials/head.phtml"); ?>
         </div>
     </form>
 </body>
+
 </html>

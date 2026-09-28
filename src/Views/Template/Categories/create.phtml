@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <?php
+
+use App\Core\Csrf;
+
 require base_path("Views/Partials/head.phtml") ?>
 
 <body>
     <?php require base_path("Views/Partials/nav.phtml") ?>
     <div class="min-h-screen flex items-center justify-center bg-gray-100 px-4">
         <form method="POST" action="/categories/store" enctype="multipart/form-data" class="bg-white shadow-xl rounded-2xl p-8 w-full max-w-md space-y-6">
+        <?= csrf() ?>
             <h2 class="text-2xl font-bold text-indigo-700 text-center mb-2">Add New Category</h2>
             <div>
                 <label for="category-name" class="block text-sm font-semibold text-indigo-700 mb-1">Category Name</label>

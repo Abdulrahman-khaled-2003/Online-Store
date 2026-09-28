@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Core\Auth;
+use App\Core\Csrf;
 use App\Core\Exceptions\RecordNotFoundException;
 use App\Core\Session;
 use App\Http\Validation\ProductValidation;
@@ -48,7 +49,7 @@ class ProductController extends Controller
 
     public function edit(int $id)
     {
-                Auth::require();
+        Auth::require();
 
         $this->render("Products/edit", [
             "errors" => $this->validated->errors ?? null,
@@ -64,7 +65,6 @@ class ProductController extends Controller
     public function store(array $attributes): void
     {
         Auth::require();
-
         $this->validated = new ProductValidation($attributes, $_FILES);
         if (! empty($this->validated->errors)) {
             $this->create($attributes['id']);
@@ -86,7 +86,6 @@ class ProductController extends Controller
     public function update(array $attributes)
     {
         Auth::require();
-
         $this->validated = new ProductValidation($attributes, $_FILES);
         if (! empty($this->validated->errors)) {
             $this->edit($attributes['id']);
@@ -99,9 +98,9 @@ class ProductController extends Controller
         redirect("/products");
     }
 
-    public function destroy(int $id)
-    {
-        Product::destroy($id);
+    public function destroy(array $attributes)
+    {   
+        Product::destroy($attributes['id']);
         Session::flash("Success-Message", "Product Deleted Successfully");
         redirect("/products");
     }

@@ -64,11 +64,7 @@ class Router
 
                     $className = "\App\Http\Controllers\\" . $className;
 
-                    if ($method == "DELETE") {
-                        $matches[] =  $_POST['id'];
-                    } else {
                         $matches[] = $_POST ?? $matches;
-                    }
 
                     call_user_func_array([new $className, $methodName], $matches);
                     exit();
